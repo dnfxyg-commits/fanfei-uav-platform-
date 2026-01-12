@@ -1,0 +1,8 @@
+{
+  "name": "閞飞翔低空产业平台 - FanFei UAV",
+  "description": "领航全球低空经济，招募全球城市合伙人，打造智慧无人机全产业链平台",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
