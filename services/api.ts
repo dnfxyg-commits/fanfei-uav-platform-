@@ -42,5 +42,21 @@ export const api = {
       console.error('Error fetching news:', error);
       return [];
     }
+  },
+  submitApplication: async (data: { name: string; phone: string; company: string; target_city: string; message: string }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/partners/apply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error('Failed to submit application');
+      return response.json();
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      throw error;
+    }
   }
 };

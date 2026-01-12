@@ -7,10 +7,36 @@ import { ArrowRight } from 'lucide-react';
 
 const PartnerSection: React.FC = () => {
   const [benefits, setBenefits] = useState<PartnerBenefit[]>([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    company: '',
+    target_city: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     api.getBenefits().then(setBenefits);
   }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await api.submitApplication(formData);
+      alert('提交成功！我们的业务经理将尽快联系您。');
+      setFormData({ name: '', phone: '', company: '', target_city: '', message: '' }); // Reset form
+    } catch (error) {
+      alert('提交失败，请稍后重试。');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="partner" className="py-24 bg-slate-900 text-white overflow-hidden relative">
@@ -52,32 +78,74 @@ const PartnerSection: React.FC = () => {
 
           <div className="bg-white rounded-3xl p-8 md:p-12 text-slate-900 shadow-2xl">
             <h3 className="text-2xl font-bold mb-6">申请成为合伙人</h3>
-            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-5" onSubmit={handleSubmit}>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700">姓名</label>
-                  <input type="text" className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="请输入姓名" />
+                  <input 
+                    type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" 
+                    placeholder="请输入姓名" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-slate-700">联系电话</label>
-                  <input type="tel" className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="常用手机号" />
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" 
+                    placeholder="常用手机号" 
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">所属公司/机构</label>
-                <input type="text" className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="公司名称" />
+                <input 
+                  type="text" 
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" 
+                  placeholder="公司名称" 
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">目标加盟城市/地区</label>
-                <input type="text" className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="例如：上海、迪拜、曼谷" />
+                <input 
+                  type="text" 
+                  name="target_city"
+                  value={formData.target_city}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" 
+                  placeholder="例如：上海、迪拜、曼谷" 
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">留言说明</label>
-                <textarea rows={3} className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" placeholder="简述您的资源优势或合作意向"></textarea>
+                <textarea 
+                  rows={3} 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 rounded-lg bg-slate-50 border focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" 
+                  placeholder="简述您的资源优势或合作意向"
+                ></textarea>
               </div>
-              <button className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-2 group">
-                提交加盟申请
-                <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+              <button 
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? '正在提交...' : '提交加盟申请'}
+                {!isSubmitting && <ArrowRight className="group-hover:translate-x-1 transition-transform" />}
               </button>
               <p className="text-center text-xs text-slate-400">
                 提交后我们的业务经理将在1-3个工作日内与您取得联系。

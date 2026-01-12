@@ -29,3 +29,10 @@ class NewsItem(BaseModel):
     category: str
     summary: str
     image: str
+
+class PartnerApplication(BaseModel):
+    name: str
+    phone: str
+    company: str
+    target_city: str
+    message: str
