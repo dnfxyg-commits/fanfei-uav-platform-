@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomeView from './views/Home';
@@ -9,9 +10,17 @@ import AboutView from './views/About';
 import PartnerView from './views/Partner';
 import NewsView from './views/News';
 
+// Admin Views
+import Login from './views/admin/Login';
+import AdminLayout from './views/admin/AdminLayout';
+import Dashboard from './views/admin/Dashboard';
+import SolutionManager from './views/admin/SolutionManager';
+import ProductManager from './views/admin/ProductManager';
+import NewsManager from './views/admin/NewsManager';
+
 export type ViewType = 'home' | 'solutions' | 'systems' | 'about' | 'partner' | 'news';
 
-function App() {
+const PublicApp = () => {
   const [currentView, setCurrentView] = useState<ViewType>('home');
 
   // Smooth scroll to top when changing views
@@ -46,6 +55,27 @@ function App() {
       </main>
       <Footer onNavigate={setCurrentView} />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Admin Routes */}
+        <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="solutions" element={<SolutionManager />} />
+          <Route path="products" element={<ProductManager />} />
+          <Route path="news" element={<NewsManager />} />
+        </Route>
+
+        {/* Public Routes - Catch all */}
+        <Route path="/*" element={<PublicApp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

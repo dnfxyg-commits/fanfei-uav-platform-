@@ -58,5 +58,84 @@ export const api = {
       console.error('Error submitting application:', error);
       throw error;
     }
+  },
+  
+  // Admin Methods
+  admin: {
+    createSolution: async (data: Solution) => {
+      const response = await fetch(`${API_BASE_URL}/solutions/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error('Failed to create solution');
+      return response.json();
+    },
+    updateSolution: async (id: string, data: Solution) => {
+      const response = await fetch(`${API_BASE_URL}/solutions/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error('Failed to update solution');
+      return response.json();
+    },
+    deleteSolution: async (id: string) => {
+      const response = await fetch(`${API_BASE_URL}/solutions/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete solution');
+      return response.json();
+    },
+    createProduct: async (data: Product) => {
+        const response = await fetch(`${API_BASE_URL}/products/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error('Failed to create product');
+        return response.json();
+      },
+      updateProduct: async (id: string, data: Product) => {
+        const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error('Failed to update product');
+        return response.json();
+      },
+      deleteProduct: async (id: string) => {
+        const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) throw new Error('Failed to delete product');
+        return response.json();
+      },
+      createNews: async (data: NewsItem) => {
+        const response = await fetch(`${API_BASE_URL}/news/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error('Failed to create news');
+        return response.json();
+      },
+      updateNews: async (id: string, data: NewsItem) => {
+        const response = await fetch(`${API_BASE_URL}/news/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error('Failed to update news');
+        return response.json();
+      },
+      deleteNews: async (id: string) => {
+        const response = await fetch(`${API_BASE_URL}/news/${id}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) throw new Error('Failed to delete news');
+        return response.json();
+      }
   }
 };
