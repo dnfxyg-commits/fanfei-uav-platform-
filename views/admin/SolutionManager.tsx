@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 import { api } from '../../services/api';
 import { Solution } from '../../types';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
