@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Mail, Phone, MapPin, Linkedin, Twitter, Youtube } from 'lucide-react';
 import { ViewType } from '../App';
@@ -52,14 +51,17 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <ul className="space-y-5">
               <li className="flex gap-4 text-slate-400">
                 <MapPin className="text-blue-500 shrink-0" size={24} />
+                {/* 👇 修改下面的地址 */}
                 <span className="text-sm">中国广东省深圳市南山区大疆路1号閞飞大厦</span>
               </li>
               <li className="flex gap-4 text-slate-400">
                 <Phone className="text-blue-500 shrink-0" size={24} />
+                {/* 👇 修改下面的电话 */}
                 <span className="text-sm">400-888-9999 (9:00-18:00)</span>
               </li>
               <li className="flex gap-4 text-slate-400">
                 <Mail className="text-blue-500 shrink-0" size={24} />
+                {/* 👇 修改下面的邮箱 */}
                 <span className="text-sm">partner@fanfeiuav.com</span>
               </li>
             </ul>

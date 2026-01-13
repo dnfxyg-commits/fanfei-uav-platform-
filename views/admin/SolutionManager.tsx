@@ -63,10 +63,10 @@ const SolutionManager: React.FC = () => {
   const openEdit = (solution: Solution) => {
     setEditingId(solution.id);
     setFormData({
-      title: solution.title,
-      description: solution.description,
-      image: solution.image,
-      icon: solution.icon,
+      title: solution.title || '',
+      description: solution.description || '',
+      image: solution.image || '',
+      icon: solution.icon || '',
     });
     setIsModalOpen(true);
   };
@@ -176,14 +176,19 @@ const SolutionManager: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">图片 URL</label>
-                <input
-                  type="text"
+                <label className="block text-sm font-medium text-gray-700 mb-1">图片</label>
+                <ImageUpload
                   value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="https://..."
-                  required
+                  onChange={(url) => setFormData({ ...formData, image: url })}
+                />
+                {/* 隐藏的输入框用于表单验证 */}
+                <input 
+                  type="text" 
+                  value={formData.image} 
+                  required 
+                  className="opacity-0 h-0 w-0 absolute"
+                  onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('请上传图片')}
+                  onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                 />
               </div>
               

@@ -12,6 +12,10 @@ app = FastAPI(
 origins = [
     "http://localhost:5173",  # Vite default
     "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3002",
+    "https://bianaero.top",
+    "https://www.bianaero.top",
     "*"
 ]
 

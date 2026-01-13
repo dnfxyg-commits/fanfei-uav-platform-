@@ -1,0 +1,7 @@
+# Frontend (Vite)
+VITE_SUPABASE_URL=https://jpgrflmlfvsdkwytirnn.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Backend (FastAPI) - 复制同样的值
+SUPABASE_URL=https://jpgrflmlfvsdkwytirnn.supabase.co
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
