@@ -10,10 +10,20 @@ const AdminLayout: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        if (error.message?.includes('aborted')) return;
+        console.error('Session check error:', error);
+      }
+      
       if (!session) {
         navigate('/admin/login');
       }
+      setLoading(false);
+    }).catch(err => {
+      // 捕获可能的 AbortError
+      if (err.name === 'AbortError' || err.message?.includes('aborted')) return;
+      console.error('Session check exception:', err);
       setLoading(false);
     });
 
