@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { api } from '../../services/api';
 import { Solution } from '../../types';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
+import ImageUpload from '@/components/ImageUpload';
 
 const SolutionManager: React.FC = () => {
   const [solutions, setSolutions] = useState<Solution[]>([]);

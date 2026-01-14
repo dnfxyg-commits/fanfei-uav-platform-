@@ -4,6 +4,7 @@ import { api } from '../../services/api';
 import { supabase } from '@/lib/supabaseClient';
 import { Product } from '../../types';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
+import ImageUpload from '@/components/ImageUpload';
 
 const ProductManager: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
