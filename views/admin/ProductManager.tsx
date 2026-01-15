@@ -17,6 +17,13 @@ const CATEGORY_OPTIONS = [
   '固定翼',
 ];
 
+const getCategoryColor = (category: string) => {
+  if (category.includes('云端') || category.includes('系统')) return 'bg-blue-50 text-blue-600 border border-blue-100';
+  if (category.includes('硬件') || category.includes('固定翼') || category.includes('VTOL') || category.includes('机库') || category.includes('消费')) return 'bg-purple-50 text-purple-600 border border-purple-100';
+  if (category.includes('服务') || category.includes('巡检')) return 'bg-green-50 text-green-600 border border-green-100';
+  return 'bg-gray-100 text-gray-600 border border-gray-100';
+};
+
 const ProductManager: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -112,7 +119,7 @@ const ProductManager: React.FC = () => {
               <tr key={product.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 font-medium text-gray-900">{product.name}</td>
                 <td className="px-6 py-4 text-gray-600">
-                    <span className="px-2 py-1 bg-blue-50 text-blue-600 rounded-md text-sm">{product.category}</span>
+                    <span className={`px-2 py-1 rounded-md text-xs font-medium ${getCategoryColor(product.category || '')}`}>{product.category}</span>
                 </td>
                 <td className="px-6 py-4 text-gray-600 max-w-md truncate">{product.description}</td>
                 <td className="px-6 py-4 text-right space-x-2">

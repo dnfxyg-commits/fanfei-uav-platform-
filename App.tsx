@@ -17,6 +17,7 @@ import Dashboard from './views/admin/Dashboard';
 import SolutionManager from './views/admin/SolutionManager';
 import ProductManager from './views/admin/ProductManager';
 import NewsManager from './views/admin/NewsManager';
+import ApplicationManager from './views/admin/ApplicationManager';
 
 export type ViewType = 'home' | 'solutions' | 'systems' | 'about' | 'partner' | 'news';
 

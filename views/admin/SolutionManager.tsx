@@ -6,6 +6,8 @@ import { Solution } from '../../types';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
+const ICON_OPTIONS = ['Zap', 'Globe', 'Shield', 'Award', 'Briefcase', 'TrendingUp', 'Server', 'Database', 'Activity', 'Box'];
+
 const SolutionManager: React.FC = () => {
   const [solutions, setSolutions] = useState<Solution[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -166,15 +168,19 @@ const SolutionManager: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">图标名称 (Lucide Icon)</label>
-                <input
-                  type="text"
+                <label className="block text-sm font-medium text-gray-700 mb-1">图标 (Lucide Icon)</label>
+                <select
                   value={formData.icon}
                   onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="e.g. Shield, Zap"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
                   required
-                />
+                >
+                  <option value="" disabled>请选择图标</option>
+                  {ICON_OPTIONS.map(icon => (
+                    <option key={icon} value={icon}>{icon}</option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">图标将用于前端展示</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">图片</label>
