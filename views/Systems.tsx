@@ -1,15 +1,21 @@
 
-import React, { useState } from 'react';
-import { PRODUCTS } from '../constants';
+import React, { useState, useEffect } from 'react';
+import { api } from '../services/api';
+import { Product } from '../types';
 import { Search, Filter, Terminal, Cpu, Cloud, Database, BarChart3, Lock, Activity, Play } from 'lucide-react';
 
 const SystemsView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('全部');
+  const [systems, setSystems] = useState<Product[]>([]);
   const categories = ['全部', '云端管理平台', '地面控制软件', '行业应用系统'];
 
+  useEffect(() => {
+    api.getProducts().then(setSystems);
+  }, []);
+
   const filteredSystems = activeCategory === '全部' 
-    ? PRODUCTS 
-    : PRODUCTS.filter(p => p.category === activeCategory);
+    ? systems 
+    : systems.filter(p => p.category === activeCategory);
 
   return (
     <div className="animate-fade-in bg-white min-h-screen">
@@ -67,20 +73,28 @@ const SystemsView: React.FC = () => {
               {filteredSystems.map((s) => (
                 <div key={s.id} className="group bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 flex flex-col">
                   <div className="relative aspect-video overflow-hidden bg-slate-900">
-                    {s.video ? (
+                    {s.image ? (
+                      <img 
+                        src={s.image} 
+                        className="w-full h-full object-cover opacity-80 transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-100" 
+                        alt={s.name} 
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-slate-100">
+                        <div className="text-slate-400 flex flex-col items-center">
+                          <Activity size={48} className="mb-2 opacity-50" />
+                          <span className="text-sm font-medium">暂无预览图</span>
+                        </div>
+                      </div>
+                    )}
+                    {s.video && (
                       <video 
                         src={s.video}
                         autoPlay
                         muted
                         loop
                         playsInline
-                        className="w-full h-full object-cover opacity-80 transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-100"
-                      />
-                    ) : (
-                      <img 
-                        src={s.image} 
-                        className="w-full h-full object-cover opacity-80 transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-100" 
-                        alt={s.name} 
+                        className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>

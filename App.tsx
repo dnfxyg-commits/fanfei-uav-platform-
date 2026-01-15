@@ -70,6 +70,7 @@ function App() {
           <Route path="solutions" element={<SolutionManager />} />
           <Route path="products" element={<ProductManager />} />
           <Route path="news" element={<NewsManager />} />
+          <Route path="applications" element={<ApplicationManager />} />
         </Route>
 
         {/* Public Routes - Catch all */}

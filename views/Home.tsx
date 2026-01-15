@@ -1,15 +1,30 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Hero from '../components/Hero';
 import Solutions from '../components/Solutions';
 import { ViewType } from '../App';
 import { TrendingUp, Award, Zap, Globe } from 'lucide-react';
+import { api } from '../services/api';
+import { Product } from '../types';
+import { PRODUCTS } from '../constants';
 
 interface HomeViewProps {
   onNavigate: (view: ViewType) => void;
 }
 
 const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    api.getProducts().then(setProducts).catch(() => {});
+  }, []);
+
+  const sourceProducts = products.length > 0 ? products : PRODUCTS;
+  const cloudSystem =
+    sourceProducts.find(p => p.category === '云端管理平台') || sourceProducts[0];
+  const aiSystem =
+    sourceProducts.find(p => p.category === '行业应用系统') || sourceProducts[1] || sourceProducts[0];
+
   return (
     <>
       <Hero />
@@ -93,22 +108,72 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
           </p>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8">
-           <div className="group relative h-[450px] overflow-hidden rounded-[2rem] shadow-lg">
-             <img src="https://images.unsplash.com/photo-1551288049-bbda38a5f452?auto=format&fit=crop&q=80&w=1000" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Cloud Management" />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
-               <h3 className="text-3xl font-bold text-white mb-3">閞飞云·低空大脑</h3>
-               <p className="text-slate-200 mb-6">统一空域调度与终端管控，支持超大规模机群协同作业。</p>
-               <button onClick={() => onNavigate('systems')} className="w-fit px-6 py-2.5 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition-colors">进入系统目录</button>
-             </div>
-           </div>
-           <div className="group relative h-[450px] overflow-hidden rounded-[2rem] shadow-lg">
-             <img src="https://images.unsplash.com/photo-1504868584819-f8e905263543?auto=format&fit=crop&q=80&w=1000" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="AI Analysis" />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
-               <h3 className="text-3xl font-bold text-white mb-3">慧眼·行业AI识别</h3>
-               <p className="text-slate-200 mb-6">深度学习算法驱动，自动识别巡检隐患与目标物体。</p>
-               <button onClick={() => onNavigate('systems')} className="w-fit px-6 py-2.5 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition-colors">进入系统目录</button>
-             </div>
-           </div>
+          <div className="group relative h-[450px] overflow-hidden rounded-[2rem] shadow-lg bg-slate-900">
+            {cloudSystem ? (
+              <>
+                <img
+                  src={cloudSystem.image}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  alt={cloudSystem.name}
+                />
+                {cloudSystem.video && (
+                  <video
+                    src={cloudSystem.video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
+                  <h3 className="text-3xl font-bold text-white mb-3">{cloudSystem.name}</h3>
+                  <p className="text-slate-200 mb-6">{cloudSystem.description}</p>
+                  <button
+                    onClick={() => onNavigate('systems')}
+                    className="w-fit px-6 py-2.5 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition-colors"
+                  >
+                    进入系统目录
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="w-full h-full bg-slate-200" />
+            )}
+          </div>
+          <div className="group relative h-[450px] overflow-hidden rounded-[2rem] shadow-lg bg-slate-900">
+            {aiSystem ? (
+              <>
+                <img
+                  src={aiSystem.image}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  alt={aiSystem.name}
+                />
+                {aiSystem.video && (
+                  <video
+                    src={aiSystem.video}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
+                  <h3 className="text-3xl font-bold text-white mb-3">{aiSystem.name}</h3>
+                  <p className="text-slate-200 mb-6">{aiSystem.description}</p>
+                  <button
+                    onClick={() => onNavigate('systems')}
+                    className="w-fit px-6 py-2.5 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition-colors"
+                  >
+                    进入系统目录
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="w-full h-full bg-slate-200" />
+            )}
+          </div>
         </div>
       </section>
 

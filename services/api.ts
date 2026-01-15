@@ -132,10 +132,23 @@ export const api = {
       },
       deleteNews: async (id: string) => {
         const response = await fetch(`${API_BASE_URL}/news/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Failed to delete news');
-        return response.json();
-      }
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete news');
+      return response.json();
+    },
+    getApplications: async () => {
+      const response = await fetch(`${API_BASE_URL}/partners/applications`);
+      if (!response.ok) throw new Error('Failed to fetch applications');
+      return response.json();
+    }
+  },
+  checkHealth: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL.replace('/api', '')}/`);
+      return response.ok;
+    } catch (e) {
+      return false;
+    }
   }
 };

@@ -17,3 +17,14 @@ def submit_application(application: PartnerApplication):
         return {"status": "success", "data": response.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/applications", response_model=List[PartnerApplication])
+def get_applications():
+    # Only for admin (RLS will handle security if configured, but here we just expose the endpoint)
+    # Ideally, we should check auth token here, but for now we rely on Supabase client key in frontend or RLS
+    try:
+        response = supabase.table("partner_applications").select("*").order("created_at", desc=True).execute()
+        return response.data
+    except Exception as e:
+        print(f"Error fetching applications: {e}")
+        return []

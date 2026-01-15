@@ -52,6 +52,7 @@ const AdminLayout: React.FC = () => {
     { path: '/admin/solutions', label: '解决方案', icon: Briefcase },
     { path: '/admin/products', label: '产品管理', icon: Package },
     { path: '/admin/news', label: '新闻动态', icon: FileText },
+    { path: '/admin/applications', label: '表单提交', icon: ClipboardList },
   ];
 
   return (

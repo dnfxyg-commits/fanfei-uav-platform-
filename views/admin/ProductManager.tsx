@@ -6,6 +6,17 @@ import { Product } from '../../types';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
+const CATEGORY_OPTIONS = [
+  '云端管理平台',
+  '地面控制软件',
+  '行业应用系统',
+  '工业巡检级',
+  '垂直起降(VTOL)',
+  '自动化机库',
+  '消费者级',
+  '固定翼',
+];
+
 const ProductManager: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -155,13 +166,21 @@ const ProductManager: React.FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">类别</label>
-                <input
-                  type="text"
+                <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
                   required
-                />
+                >
+                  <option value="" disabled>
+                    请选择类别
+                  </option>
+                  {CATEGORY_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">描述</label>
