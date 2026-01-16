@@ -1,0 +1,24 @@
+# Backend (FastAPI)
+SUPABASE_URL=https://jpgrflmlfvsdkwytirnn.supabase.co
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im... (非常长)// ...
+          <div>
+            <h4 className="text-xl font-bold mb-8">联系我们</h4>
+            <ul className="space-y-5">
+              <li className="flex gap-4 text-slate-400">
+                <MapPin className="text-blue-500 shrink-0" size={24} />
+                {/* 👇 修改下面的地址 */}
+                <span className="text-sm">中国上海市虹桥商业区閞飞大厦</span>
+              </li>
+              <li className="flex gap-4 text-slate-400">
+                <Phone className="text-blue-500 shrink-0" size={24} />
+                {/* 👇 修改下面的电话 */}
+                <span className="text-sm">18516330891 (9:00-18:00)</span>
+              </li>
+              <li className="flex gap-4 text-slate-400">
+                <Mail className="text-blue-500 shrink-0" size={24} />
+                {/* 👇 修改下面的邮箱 */}
+                <span className="text-sm">SKY@XINGDAXUEYUAN.TOP</span>
+              </li>
+            </ul>
+          </div>
+// ...

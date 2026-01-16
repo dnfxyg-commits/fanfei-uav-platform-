@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/supabaseClient';
-import { LayoutDashboard, Package, Briefcase, FileText, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, Briefcase, FileText, LogOut, ClipboardList } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);

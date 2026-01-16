@@ -52,26 +52,23 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li className="flex gap-4 text-slate-400">
                 <MapPin className="text-blue-500 shrink-0" size={24} />
                 {/* 👇 修改下面的地址 */}
-                <span className="text-sm">中国广东省深圳市南山区大疆路1号閞飞大厦</span>
+                <span className="text-sm">上海虹桥商务区閞飞翔大厦</span>
               </li>
               <li className="flex gap-4 text-slate-400">
                 <Phone className="text-blue-500 shrink-0" size={24} />
                 {/* 👇 修改下面的电话 */}
-                <span className="text-sm">400-888-9999 (9:00-18:00)</span>
+                <span className="text-sm">18516330891 (9:00-18:00)</span>
               </li>
               <li className="flex gap-4 text-slate-400">
                 <Mail className="text-blue-500 shrink-0" size={24} />
                 {/* 👇 修改下面的邮箱 */}
-                <span className="text-sm">partner@fanfeiuav.com</span>
+                <span className="text-sm">partner@bianaero.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-slate-500 text-sm">
-            © 2024 閞飞翔(深圳)科技有限公司 版权所有 粤ICP备88888888号
-          </p>
           <div className="flex gap-8 text-sm text-slate-500">
             <a href="#" className="hover:text-white transition-colors">隐私政策</a>
             <a href="#" className="hover:text-white transition-colors">服务协议</a>
