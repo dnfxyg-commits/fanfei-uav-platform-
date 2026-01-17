@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Product } from '../types';
-import { Search, Filter, Terminal, Cpu, Cloud, Database, BarChart3, Lock, Activity, Play } from 'lucide-react';
+import { Search, Filter, Terminal, Cpu, Cloud, Database, BarChart3, Lock, Activity } from 'lucide-react';
 
 const SystemsView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('全部');
@@ -71,13 +71,16 @@ const SystemsView: React.FC = () => {
           {filteredSystems.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {filteredSystems.map((s) => (
-                <div key={s.id} className="group bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 flex flex-col">
+                <div
+                  key={s.id}
+                  className="group bg-white rounded-3xl overflow-hidden border border-slate-100 hover:border-blue-200 hover:shadow-2xl transition-all duration-500 flex flex-col"
+                >
                   <div className="relative aspect-video overflow-hidden bg-slate-900">
                     {s.image ? (
-                      <img 
-                        src={s.image} 
-                        className="w-full h-full object-cover opacity-80 transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-100" 
-                        alt={s.name} 
+                      <img
+                        src={s.image}
+                        className="w-full h-full object-cover opacity-80 transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-100"
+                        alt={s.name}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-slate-100">
@@ -87,29 +90,11 @@ const SystemsView: React.FC = () => {
                         </div>
                       </div>
                     )}
-                    {s.video && (
-                      <video 
-                        src={s.video}
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                      />
-                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
-                    
-                    {/* Live Badge if video exists */}
-                    {s.video && (
-                      <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 bg-blue-600/80 backdrop-blur rounded-full text-[10px] font-black text-white uppercase tracking-widest">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-                        Live Demo
-                      </div>
-                    )}
 
                     <div className="absolute top-5 right-5">
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center text-white">
-                        {s.video ? <Play size={18} fill="currentColor" /> : <Terminal size={18} />}
+                        <Terminal size={18} />
                       </div>
                     </div>
                   </div>

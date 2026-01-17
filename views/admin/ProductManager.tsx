@@ -214,16 +214,6 @@ const ProductManager: React.FC = () => {
                   onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">视频 URL (可选)</label>
-                <input
-                  type="text"
-                  value={formData.video}
-                  onChange={(e) => setFormData({ ...formData, video: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                  placeholder="https://..."
-                />
-              </div>
               
               <div className="flex justify-end gap-3 mt-6">
                 <button

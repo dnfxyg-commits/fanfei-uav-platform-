@@ -116,16 +116,6 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   alt={cloudSystem.name}
                 />
-                {cloudSystem.video && (
-                  <video
-                    src={cloudSystem.video}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  />
-                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
                   <h3 className="text-3xl font-bold text-white mb-3">{cloudSystem.name}</h3>
                   <p className="text-slate-200 mb-6">{cloudSystem.description}</p>
@@ -149,16 +139,6 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   alt={aiSystem.name}
                 />
-                {aiSystem.video && (
-                  <video
-                    src={aiSystem.video}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  />
-                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
                   <h3 className="text-3xl font-bold text-white mb-3">{aiSystem.name}</h3>
                   <p className="text-slate-200 mb-6">{aiSystem.description}</p>
