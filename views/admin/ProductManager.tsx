@@ -5,17 +5,9 @@ import { supabase } from '@/lib/supabaseClient';
 import { Product } from '../../types';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
+import { PRODUCT_CATEGORY_OPTIONS } from '../../constants';
 
-const CATEGORY_OPTIONS = [
-  '云端管理平台',
-  '地面控制软件',
-  '行业应用系统',
-  '工业巡检级',
-  '垂直起降(VTOL)',
-  '自动化机库',
-  '消费者级',
-  '固定翼',
-];
+const CATEGORY_OPTIONS = PRODUCT_CATEGORY_OPTIONS;
 
 const getCategoryColor = (category: string) => {
   if (category.includes('云端') || category.includes('系统')) return 'bg-blue-50 text-blue-600 border border-blue-100';

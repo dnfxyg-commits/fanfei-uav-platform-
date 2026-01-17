@@ -3,6 +3,27 @@ import React from 'react';
 import { Shield, Plane, TrendingUp, Globe, Users, Briefcase, Zap, MapPin } from 'lucide-react';
 import { Solution, Product, PartnerBenefit, NewsItem } from './types';
 
+export const PRODUCT_CATEGORY_OPTIONS = [
+  '云端管理平台',
+  '地面控制软件',
+  '行业应用系统',
+  '工业巡检级',
+  '垂直起降(VTOL)',
+  '自动化机库',
+  '消费者级',
+  '固定翼',
+];
+
+export const SYSTEM_CATEGORY_OPTIONS = [
+  '云端管理平台',
+  '地面控制软件',
+  '行业应用系统',
+];
+
+export const HARDWARE_CATEGORY_OPTIONS = PRODUCT_CATEGORY_OPTIONS.filter(
+  (c) => !SYSTEM_CATEGORY_OPTIONS.includes(c)
+);
+
 export const SOLUTIONS: Solution[] = [
   {
     id: 'agriculture',

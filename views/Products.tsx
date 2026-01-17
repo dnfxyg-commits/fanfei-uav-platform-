@@ -3,19 +3,25 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Product } from '../types';
 import { Search, Filter, ShoppingCart, Zap, Battery, Signal } from 'lucide-react';
+import { HARDWARE_CATEGORY_OPTIONS } from '../constants';
 
 const ProductsView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('全部');
   const [products, setProducts] = useState<Product[]>([]);
-  const categories = ['全部', '工业巡检级', '垂直起降(VTOL)', '自动化机库', '消费者级'];
+  const [search, setSearch] = useState('');
+  const categories = ['全部', ...HARDWARE_CATEGORY_OPTIONS];
 
   useEffect(() => {
     api.getProducts().then(setProducts);
   }, []);
 
-  const filteredProducts = activeCategory === '全部' 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
+  const normalizedSearch = search.trim().toLowerCase();
+  const filteredProducts = products.filter(p => {
+    const matchCategory = activeCategory === '全部' || p.category === activeCategory;
+    const text = `${p.name}${p.description}`.toLowerCase();
+    const matchSearch = !normalizedSearch || text.includes(normalizedSearch);
+    return matchCategory && matchSearch;
+  });
 
   return (
     <div className="animate-fade-in bg-white min-h-screen">
@@ -35,6 +41,8 @@ const ProductsView: React.FC = () => {
                 <input 
                   type="text" 
                   placeholder="搜索产品..." 
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   className="pl-10 pr-4 py-2.5 bg-slate-50 border rounded-full text-sm focus:ring-2 focus:ring-blue-100 outline-none w-64"
                 />
               </div>
