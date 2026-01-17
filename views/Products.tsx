@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Product } from '../types';
 import { Search, Filter, ShoppingCart, Zap, Battery, Signal } from 'lucide-react';
-import { HARDWARE_CATEGORY_OPTIONS } from '../constants';
+import { PRODUCT_CATEGORY_OPTIONS } from '../constants';
 
 const ProductsView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('全部');
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
-  const categories = ['全部', ...HARDWARE_CATEGORY_OPTIONS];
+  const categories = ['全部', ...PRODUCT_CATEGORY_OPTIONS];
 
   useEffect(() => {
     api.getProducts().then(setProducts);

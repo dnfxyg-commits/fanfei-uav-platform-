@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { Product } from '../types';
 import { Search, Filter, Terminal, Cpu, Cloud, Database, BarChart3, Lock, Activity } from 'lucide-react';
-import { SYSTEM_CATEGORY_OPTIONS } from '../constants';
+import { PRODUCT_CATEGORY_OPTIONS } from '../constants';
 
 const SystemsView: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('全部');
   const [systems, setSystems] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
 
-  const categories = ['全部', ...SYSTEM_CATEGORY_OPTIONS];
+  const categories = ['全部', ...PRODUCT_CATEGORY_OPTIONS];
 
   useEffect(() => {
     api.getProducts().then(setSystems);
