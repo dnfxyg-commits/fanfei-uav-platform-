@@ -58,7 +58,11 @@ const ProductManager: React.FC = () => {
       loadProducts();
     } catch (error) {
       console.error('Operation failed:', error);
-      alert('操作失败，请重试');
+      if (error instanceof Error) {
+        alert(`操作失败：${error.message}`);
+      } else {
+        alert('操作失败，请重试');
+      }
     }
   };
 

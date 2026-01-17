@@ -2,12 +2,38 @@ import { Solution, Product, PartnerBenefit, NewsItem } from '../types';
 
 const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:8000/api';
 
+async function handleJsonResponse(response: Response, defaultMessage: string) {
+  if (response.ok) {
+    return response.json();
+  }
+
+  let detail = '';
+  try {
+    const data = await response.json();
+    if (data && typeof data === 'object') {
+      if ('detail' in data && typeof (data as any).detail === 'string') {
+        detail = (data as any).detail;
+      } else {
+        detail = JSON.stringify(data);
+      }
+    }
+  } catch {
+    try {
+      detail = await response.text();
+    } catch {
+      detail = '';
+    }
+  }
+
+  const message = detail ? `${defaultMessage}: ${response.status} ${detail}` : `${defaultMessage}: ${response.status}`;
+  throw new Error(message);
+}
+
 export const api = {
   getSolutions: async (): Promise<Solution[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/solutions/`);
-      if (!response.ok) throw new Error('Failed to fetch solutions');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to fetch solutions');
     } catch (error) {
       console.error('Error fetching solutions:', error);
       return [];
@@ -16,8 +42,7 @@ export const api = {
   getProducts: async (): Promise<Product[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/products/`);
-      if (!response.ok) throw new Error('Failed to fetch products');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to fetch products');
     } catch (error) {
       console.error('Error fetching products:', error);
       return [];
@@ -26,8 +51,7 @@ export const api = {
   getBenefits: async (): Promise<PartnerBenefit[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/partners/`);
-      if (!response.ok) throw new Error('Failed to fetch benefits');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to fetch benefits');
     } catch (error) {
       console.error('Error fetching benefits:', error);
       return [];
@@ -36,8 +60,7 @@ export const api = {
   getNews: async (): Promise<NewsItem[]> => {
     try {
       const response = await fetch(`${API_BASE_URL}/news/`);
-      if (!response.ok) throw new Error('Failed to fetch news');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to fetch news');
     } catch (error) {
       console.error('Error fetching news:', error);
       return [];
@@ -52,15 +75,12 @@ export const api = {
         },
         body: JSON.stringify(data),
       });
-      if (!response.ok) throw new Error('Failed to submit application');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to submit application');
     } catch (error) {
       console.error('Error submitting application:', error);
       throw error;
     }
   },
-  
-  // Admin Methods
   admin: {
     createSolution: async (data: Solution) => {
       const response = await fetch(`${API_BASE_URL}/solutions/`, {
@@ -68,8 +88,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!response.ok) throw new Error('Failed to create solution');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to create solution');
     },
     updateSolution: async (id: string, data: Solution) => {
       const response = await fetch(`${API_BASE_URL}/solutions/${id}`, {
@@ -77,71 +96,62 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!response.ok) throw new Error('Failed to update solution');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to update solution');
     },
     deleteSolution: async (id: string) => {
       const response = await fetch(`${API_BASE_URL}/solutions/${id}`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('Failed to delete solution');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to delete solution');
     },
     createProduct: async (data: Product) => {
-        const response = await fetch(`${API_BASE_URL}/products/`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        if (!response.ok) throw new Error('Failed to create product');
-        return response.json();
-      },
-      updateProduct: async (id: string, data: Product) => {
-        const response = await fetch(`${API_BASE_URL}/products/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        if (!response.ok) throw new Error('Failed to update product');
-        return response.json();
-      },
-      deleteProduct: async (id: string) => {
-        const response = await fetch(`${API_BASE_URL}/products/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Failed to delete product');
-        return response.json();
-      },
-      createNews: async (data: NewsItem) => {
-        const response = await fetch(`${API_BASE_URL}/news/`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        if (!response.ok) throw new Error('Failed to create news');
-        return response.json();
-      },
-      updateNews: async (id: string, data: NewsItem) => {
-        const response = await fetch(`${API_BASE_URL}/news/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-        if (!response.ok) throw new Error('Failed to update news');
-        return response.json();
-      },
-      deleteNews: async (id: string) => {
-        const response = await fetch(`${API_BASE_URL}/news/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/products/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to create product');
+    },
+    updateProduct: async (id: string, data: Product) => {
+      const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to update product');
+    },
+    deleteProduct: async (id: string) => {
+      const response = await fetch(`${API_BASE_URL}/products/${id}`, {
         method: 'DELETE',
       });
-      if (!response.ok) throw new Error('Failed to delete news');
-      return response.json();
+      return await handleJsonResponse(response, 'Failed to delete product');
+    },
+    createNews: async (data: NewsItem) => {
+      const response = await fetch(`${API_BASE_URL}/news/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to create news');
+    },
+    updateNews: async (id: string, data: NewsItem) => {
+      const response = await fetch(`${API_BASE_URL}/news/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to update news');
+    },
+    deleteNews: async (id: string) => {
+      const response = await fetch(`${API_BASE_URL}/news/${id}`, {
+        method: 'DELETE',
+      });
+      return await handleJsonResponse(response, 'Failed to delete news');
     },
     getApplications: async () => {
       const response = await fetch(`${API_BASE_URL}/partners/applications`);
-      if (!response.ok) throw new Error('Failed to fetch applications');
-      return response.json();
-    }
+      return await handleJsonResponse(response, 'Failed to fetch applications');
+    },
   },
   checkHealth: async () => {
     try {
@@ -150,5 +160,5 @@ export const api = {
     } catch (e) {
       return false;
     }
-  }
+  },
 };
