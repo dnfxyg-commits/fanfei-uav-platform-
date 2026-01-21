@@ -14,6 +14,13 @@ export const PRODUCT_CATEGORY_OPTIONS = [
   '固定翼',
 ];
 
+export const NEWS_CATEGORY_OPTIONS = [
+  '公司动态',
+  '技术创新',
+  '市场合作',
+  '行业观点',
+];
+
 export const SYSTEM_CATEGORY_OPTIONS = [
   '云端管理平台',
   '地面控制软件',

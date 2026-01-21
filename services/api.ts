@@ -1,4 +1,4 @@
-import { Solution, Product, PartnerBenefit, NewsItem } from '../types';
+import { Solution, Product, PartnerBenefit, NewsItem, AdminUserCreate, AdminUser } from '../types';
 
 const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:8000/api';
 
@@ -79,6 +79,46 @@ export const api = {
     } catch (error) {
       console.error('Error submitting application:', error);
       throw error;
+    }
+  },
+  auth: {
+    login: async (username: string, password: string): Promise<{ access_token: string; token_type: string; username: string; role: string }> => {
+        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+        });
+        return await handleJsonResponse(response, 'Login failed');
+    },
+    register: async (data: AdminUserCreate): Promise<{ message: string }> => {
+        const response = await fetch(`${API_BASE_URL}/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+        return await handleJsonResponse(response, 'Register failed');
+    },
+    createUser: async (data: AdminUserCreate): Promise<{ message: string }> => {
+        const token = localStorage.getItem('access_token');
+        const response = await fetch(`${API_BASE_URL}/auth/users`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(data),
+        });
+        return await handleJsonResponse(response, 'Create user failed');
+    },
+    getUsers: async (): Promise<AdminUser[]> => {
+        const token = localStorage.getItem('access_token');
+        const response = await fetch(`${API_BASE_URL}/auth/users`, {
+            method: 'GET',
+            headers: { 
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return await handleJsonResponse(response, 'Get users failed');
     }
   },
   admin: {

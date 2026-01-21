@@ -29,6 +29,8 @@ class NewsItem(BaseModel):
     category: str
     summary: str
     image: str
+    source: Optional[str] = None
+    author: Optional[str] = None
 
 class PartnerApplication(BaseModel):
     name: str
@@ -36,3 +38,18 @@ class PartnerApplication(BaseModel):
     company: str
     target_city: str
     message: str
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+class AdminUserCreate(BaseModel):
+    username: str
+    password: str
+    role: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    username: str
+    role: str

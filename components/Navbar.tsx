@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Globe } from 'lucide-react';
+import { Menu, X, Lock } from 'lucide-react';
 import { ViewType } from '../App';
 
 interface NavbarProps {
@@ -65,11 +65,16 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 )}
               </button>
             ))}
-            <div className={`flex items-center gap-1 cursor-pointer pl-4 border-l ${isTransparent ? 'text-slate-100 border-white/20' : 'text-slate-600 border-slate-200'}`}>
-              <Globe size={16} />
-              <span className="text-xs font-bold tracking-tighter">CN</span>
-              <ChevronDown size={14} />
-            </div>
+
+            {/* Admin Login - Replaces Language Selector */}
+            <a 
+              href="/admin/login"
+              className={`flex items-center gap-2 cursor-pointer pl-6 border-l transition-colors ${isTransparent ? 'text-slate-100 border-white/20 hover:text-white' : 'text-slate-600 border-slate-200 hover:text-blue-600'}`}
+              title="进入管理后台"
+            >
+              <Lock size={16} />
+              <span className="text-sm font-medium">管理后台</span>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -106,6 +111,15 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 {link.name}
               </button>
             ))}
+            
+            <a
+              href="/admin/login"
+              target="_blank"
+              className="block w-full text-left px-4 py-3 text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 rounded-xl transition-colors flex items-center gap-2"
+            >
+              <Lock size={18} />
+              管理后台
+            </a>
           </div>
         </div>
       )}

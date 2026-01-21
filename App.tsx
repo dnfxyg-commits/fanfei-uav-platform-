@@ -18,6 +18,7 @@ import SolutionManager from './views/admin/SolutionManager';
 import ProductManager from './views/admin/ProductManager';
 import NewsManager from './views/admin/NewsManager';
 import ApplicationManager from './views/admin/ApplicationManager';
+import UserManager from './views/admin/UserManager';
 
 export type ViewType = 'home' | 'solutions' | 'systems' | 'about' | 'partner' | 'news';
 
@@ -72,6 +73,7 @@ function App() {
           <Route path="products" element={<ProductManager />} />
           <Route path="news" element={<NewsManager />} />
           <Route path="applications" element={<ApplicationManager />} />
+          <Route path="users" element={<UserManager />} />
         </Route>
 
         {/* Public Routes - Catch all */}

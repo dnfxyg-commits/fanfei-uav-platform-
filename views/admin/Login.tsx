@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
 import { useNavigate } from 'react-router-dom';
+import { api } from '@/services/api';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -15,23 +15,18 @@ const Login: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // 检查环境变量
-    if (!import.meta.env.VITE_SUPABASE_URL || import.meta.env.VITE_SUPABASE_ANON_KEY?.includes('请在此处填入')) {
-        setError('请先在项目根目录的 .env 文件中配置 VITE_SUPABASE_ANON_KEY');
+    try {
+        const response = await api.auth.login(username, password);
+        
+        // 登录成功，保存 token 和 user info
+        localStorage.setItem('access_token', response.access_token);
+        localStorage.setItem('admin_username', response.username);
+        localStorage.setItem('admin_role', response.role);
+        
+        navigate('/admin/dashboard');
+    } catch (err: any) {
+        setError(err.message || '登录失败，请检查用户名或密码');
         setLoading(false);
-        return;
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    } else {
-      navigate('/admin/dashboard');
     }
   };
 
@@ -42,13 +37,14 @@ const Login: React.FC = () => {
         {error && <div className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</div>}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">邮箱</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2">用户名</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              placeholder="请输入用户名"
             />
           </div>
           <div>

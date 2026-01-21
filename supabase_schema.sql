@@ -1,69 +1,40 @@
--- Enable UUID extension if needed (optional for this schema as we use text IDs for some)
-create extension if not exists "uuid-ossp";
+-- Drop table if exists to ensure clean state for new schema
+DROP TABLE IF EXISTS public.admin_users;
 
--- Solutions Table
-create table if not exists solutions (
-    id text primary key,
-    title text not null,
-    description text not null,
-    image text not null,
-    icon text not null
+-- Create admin_users table to store user roles and password hashes (since we are bypassing Supabase Auth)
+CREATE TABLE public.admin_users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  username TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('super_admin', 'content_operator', 'business_operator')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Products Table
-create table if not exists products (
-    id text primary key,
-    name text not null,
-    category text not null,
-    description text not null,
-    image text not null,
-    video text
-);
+-- Enable RLS
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
 
--- Partner Benefits Table
-create table if not exists partner_benefits (
-    id serial primary key,
-    title text not null,
-    description text not null,
-    icon text not null
-);
+-- Create policies
 
--- News Items Table
-create table if not exists news_items (
-    id text primary key,
-    title text not null,
-    date date not null,
-    category text not null,
-    summary text not null,
-    image text not null
-);
+-- Allow users to read their own profile (e.g. for checking role)
+-- Since we are not using Supabase Auth, current_user is not useful here in the same way.
+-- But the backend handles the logic. RLS might be less relevant if we use a service role key in backend 
+-- or if we don't use Supabase Client in frontend for this table anymore.
+-- However, for safety, we can keep policies or just allow the service role (which has bypass RLS).
+-- If we use the Supabase Client from frontend (anon key), we need policies.
+-- But wait, our backend uses `supabase-py` which usually uses the SERVICE_ROLE_KEY if configured that way, 
+-- OR it uses the anon key. 
+-- In `database.py` (which I haven't seen but assume exists), if it uses `service_role`, RLS is bypassed.
+-- If it uses `anon`, we need RLS.
+-- Given the backend logic: `supabase.table("admin_users").select("*")...`
+-- If this runs on the server, it should ideally use Service Role to manage all users.
 
--- Partner Applications Table (NEW)
-create table if not exists partner_applications (
-    id serial primary key,
-    name text not null,
-    phone text not null,
-    company text,
-    target_city text,
-    message text,
-    created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
+-- For now, let's just enable RLS and create a policy that allows everything for the service role (implicit)
+-- and maybe restrict public access.
+-- Actually, if we are strictly using the Python Backend API for all admin_users operations,
+-- we don't need to expose this table to the frontend Supabase client at all.
+-- So we can just leave RLS enabled with NO policies for `anon` / `authenticated` roles, 
+-- effectively making it private to the Service Role (Backend).
 
--- Row Level Security (RLS) - Optional: Enable public read access
-alter table solutions enable row level security;
-create policy "Public solutions are viewable by everyone" on solutions for select using (true);
-
-alter table products enable row level security;
-create policy "Public products are viewable by everyone" on products for select using (true);
-
-alter table partner_benefits enable row level security;
-create policy "Public partner_benefits are viewable by everyone" on partner_benefits for select using (true);
-
-alter table news_items enable row level security;
-create policy "Public news_items are viewable by everyone" on news_items for select using (true);
-
-alter table partner_applications enable row level security;
--- Allow anyone to insert applications (anonymous submission)
-create policy "Public can insert applications" on partner_applications for insert with check (true);
--- Only authenticated users (admins) can view applications - for now we might leave it open or restricted
--- For simplicity in this demo, we won't add a view policy for public, so data is write-only for public
+-- So, just CREATE TABLE is enough if backend uses Service Role.
+-- If backend uses Anon Key, we need to allow read/write.
+-- Let's assume Backend uses Service Role Key for administrative tasks (which is best practice).

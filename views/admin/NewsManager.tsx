@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { NewsItem } from '../../types';
 import { Plus, Edit, Trash2, X } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
+import { NEWS_CATEGORY_OPTIONS } from '@/constants';
 
 const NewsManager: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -16,6 +17,8 @@ const NewsManager: React.FC = () => {
     category: '',
     summary: '',
     image: '',
+    source: '閞飞翔低空产业平台',
+    author: '品牌公关部',
   });
 
   useEffect(() => {
@@ -64,13 +67,23 @@ const NewsManager: React.FC = () => {
       category: item.category || '',
       summary: item.summary || '',
       image: item.image || '',
+      source: item.source || '閞飞翔低空产业平台',
+      author: item.author || '品牌公关部',
     });
     setIsModalOpen(true);
   };
 
   const resetForm = () => {
     setEditingId(null);
-    setFormData({ title: '', date: '', category: '', summary: '', image: '' });
+    setFormData({
+      title: '',
+      date: '',
+      category: '',
+      summary: '',
+      image: '',
+      source: '閞飞翔低空产业平台',
+      author: '品牌公关部',
+    });
   };
 
   return (
@@ -166,13 +179,21 @@ const NewsManager: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">分类</label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
                     required
-                  />
+                  >
+                    <option value="" disabled>
+                      请选择分类
+                    </option>
+                    {NEWS_CATEGORY_OPTIONS.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div>
@@ -184,6 +205,26 @@ const NewsManager: React.FC = () => {
                   rows={3}
                   required
                 />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">文章来源</label>
+                  <input
+                    type="text"
+                    value={formData.source || ''}
+                    onChange={(e) => setFormData({ ...formData, source: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">作者</label>
+                  <input
+                    type="text"
+                    value={formData.author || ''}
+                    onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">图片</label>

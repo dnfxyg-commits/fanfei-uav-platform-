@@ -29,4 +29,21 @@ export interface NewsItem {
   category: string;
   summary: string;
   image: string;
+  source?: string;
+  author?: string;
+}
+
+export type AdminRole = 'super_admin' | 'content_operator' | 'business_operator';
+
+export interface AdminUser {
+  id: string;
+  username: string;
+  role: AdminRole;
+  created_at: string;
+}
+
+export interface AdminUserCreate {
+    username: string;
+    password: string;
+    role: AdminRole;
 }

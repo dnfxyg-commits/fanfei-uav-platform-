@@ -1,45 +1,36 @@
 
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from '@/lib/supabaseClient';
-import { LayoutDashboard, Package, Briefcase, FileText, LogOut, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, Package, Briefcase, FileText, LogOut, ClipboardList, Shield, Users } from 'lucide-react';
+import { AdminRole } from '@/types';
 
 const AdminLayout: React.FC = () => {
   const [loading, setLoading] = useState(true);
+  const [role, setRole] = useState<AdminRole | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        if (error.message?.includes('aborted')) return;
-        console.error('Session check error:', error);
-      }
-      
-      if (!session) {
-        navigate('/admin/login');
-      }
-      setLoading(false);
-    }).catch(err => {
-      // 捕获可能的 AbortError
-      if (err.name === 'AbortError' || err.message?.includes('aborted')) return;
-      console.error('Session check exception:', err);
-      setLoading(false);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        navigate('/admin/login');
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    const checkAuth = () => {
+        const token = localStorage.getItem('access_token');
+        const savedRole = localStorage.getItem('admin_role') as AdminRole;
+        
+        if (!token || !savedRole) {
+            navigate('/admin/login');
+            return;
+        }
+        
+        setRole(savedRole);
+        setLoading(false);
+    };
+    
+    checkAuth();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('admin_username');
+    localStorage.removeItem('admin_role');
     navigate('/admin/login');
   };
 
@@ -47,20 +38,40 @@ const AdminLayout: React.FC = () => {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  const navItems = [
-    { path: '/admin/dashboard', label: '仪表盘', icon: LayoutDashboard },
-    { path: '/admin/solutions', label: '解决方案', icon: Briefcase },
-    { path: '/admin/products', label: '产品管理', icon: Package },
-    { path: '/admin/news', label: '新闻动态', icon: FileText },
-    { path: '/admin/applications', label: '表单提交', icon: ClipboardList },
+  // Define menu items
+  const allNavItems = [
+    { path: '/admin/dashboard', label: '仪表盘', icon: LayoutDashboard, roles: ['super_admin', 'content_operator', 'business_operator'] },
+    { path: '/admin/solutions', label: '解决方案', icon: Briefcase, roles: ['super_admin', 'content_operator'] },
+    { path: '/admin/products', label: '产品管理', icon: Package, roles: ['super_admin', 'content_operator'] },
+    { path: '/admin/news', label: '新闻动态', icon: FileText, roles: ['super_admin', 'content_operator'] },
+    { path: '/admin/applications', label: '表单提交', icon: ClipboardList, roles: ['super_admin', 'business_operator'] },
+    { path: '/admin/users', label: '用户管理', icon: Users, roles: ['super_admin'] },
   ];
+
+  // Filter items based on role
+  // If role is null (e.g. table not ready), we might show nothing or all (let's show nothing safe)
+  // Or for development, if no role found but logged in, maybe show dashboard?
+  // Let's strict:
+  const navItems = allNavItems.filter(item => 
+    role && item.roles.includes(role)
+  );
 
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-slate-900 text-white flex flex-col">
         <div className="p-6">
-          <h1 className="text-xl font-bold">后台管理系统</h1>
+          <h1 className="text-xl font-bold flex items-center gap-2">
+            <Shield className="text-blue-500" />
+            后台管理系统
+          </h1>
+          {role && (
+            <div className="mt-2 text-xs text-slate-400 uppercase tracking-wider bg-slate-800 py-1 px-2 rounded w-fit">
+              {role === 'super_admin' && '超级管理员'}
+              {role === 'content_operator' && '内容运营'}
+              {role === 'business_operator' && '业务运营'}
+            </div>
+          )}
         </div>
         <nav className="flex-1 px-4 space-y-2">
           {navItems.map((item) => {

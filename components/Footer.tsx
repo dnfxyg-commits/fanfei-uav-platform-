@@ -59,11 +59,6 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 {/* 👇 修改下面的电话 */}
                 <span className="text-sm">18516330891 (9:00-18:00)</span>
               </li>
-              <li className="flex gap-4 text-slate-400">
-                <Mail className="text-blue-500 shrink-0" size={24} />
-                {/* 👇 修改下面的邮箱 */}
-                <span className="text-sm">partner@bianaero.com</span>
-              </li>
             </ul>
           </div>
         </div>
