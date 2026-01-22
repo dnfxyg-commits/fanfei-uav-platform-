@@ -37,8 +37,10 @@ def login(request: LoginRequest):
         raise
     except Exception as e:
         print(f"Login Error: {str(e)}")
-        # Return detailed error for debugging (remove in production later)
-        raise HTTPException(status_code=500, detail=f"Internal Error: {str(e)}")
+        # Return detailed error for debugging
+        import os
+        debug_info = f"Supabase URL set: {bool(os.environ.get('SUPABASE_URL'))}, Key set: {bool(os.environ.get('SUPABASE_KEY'))}"
+        raise HTTPException(status_code=500, detail=f"Internal Error: {str(e)} | {debug_info}")
 
 @router.post("/register", status_code=201)
 def register(user: AdminUserCreate):
@@ -78,7 +80,9 @@ def register(user: AdminUserCreate):
         supabase.table("admin_users").insert(data).execute()
         return {"message": "初始管理员创建成功"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        import os
+        debug_info = f"Supabase URL set: {bool(os.environ.get('SUPABASE_URL'))}, Key set: {bool(os.environ.get('SUPABASE_KEY'))}"
+        raise HTTPException(status_code=500, detail=f"Internal Error: {str(e)} | {debug_info}")
 
 @router.post("/users", status_code=201)
 def create_user(user: AdminUserCreate, current_user: dict = Depends(get_current_super_admin)):

@@ -7,7 +7,8 @@ from fastapi.security import OAuth2PasswordBearer
 import os
 
 # Password Hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Use pbkdf2_sha256 which is pure python and more reliable on serverless than bcrypt
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 def verify_password(plain_password, hashed_password):
     try:
