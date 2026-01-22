@@ -8,12 +8,26 @@ router = APIRouter(prefix="/api/products", tags=["Products"])
 @router.get("/", response_model=List[Product])
 def get_products():
     try:
-        response = supabase.table("products").select("*").execute()
+        # Sort by sort_order ascending, then by id descending (newest first if sort_order same)
+        response = supabase.table("products").select("*").order("sort_order", desc=False).order("id", desc=True).execute()
         if getattr(response, "error", None):
             raise HTTPException(status_code=500, detail=str(response.error))
         return response.data
     except HTTPException:
         raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/reorder")
+def reorder_products(items: List[dict]):
+    # items should be a list of {"id": "...", "sort_order": 1}
+    try:
+        # Since Supabase Python client doesn't support bulk upsert easily for partial updates without checking primary keys,
+        # we will loop update. For a small number of products (e.g. < 100), this is acceptable.
+        # Ideally, we would use an RPC call if performance is critical.
+        for item in items:
+            supabase.table("products").update({"sort_order": item["sort_order"]}).eq("id", item["id"]).execute()
+        return {"message": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

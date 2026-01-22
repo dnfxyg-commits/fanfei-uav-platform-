@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import { supabase } from '@/lib/supabaseClient';
 import { Product } from '../../types';
-import { Plus, Edit, Trash2, X } from 'lucide-react';
+import { Plus, Edit, Trash2, X, ArrowUp, ArrowDown } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 import { PRODUCT_CATEGORY_OPTIONS } from '../../constants';
 
@@ -70,6 +70,37 @@ const ProductManager: React.FC = () => {
     }
   };
 
+  const handleMove = async (index: number, direction: 'up' | 'down') => {
+    if (
+      (direction === 'up' && index === 0) ||
+      (direction === 'down' && index === products.length - 1)
+    ) {
+      return;
+    }
+
+    const newProducts = [...products];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    // Swap locally
+    [newProducts[index], newProducts[targetIndex]] = [newProducts[targetIndex], newProducts[index]];
+    setProducts(newProducts);
+
+    // Calculate new orders (simple implementation: use index * 10)
+    // To ensure consistency, we update ALL items with their new index * 10
+    const updates = newProducts.map((p, idx) => ({
+      id: p.id,
+      sort_order: idx * 10
+    }));
+
+    try {
+      await api.admin.reorderProducts(updates);
+    } catch (error) {
+      console.error('Reorder failed:', error);
+      alert('排序更新失败');
+      loadProducts(); // Revert on error
+    }
+  };
+
   const openEdit = (product: Product) => {
     setEditingId(product.id);
     setFormData({
@@ -105,15 +136,40 @@ const ProductManager: React.FC = () => {
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
               <th className="px-6 py-4 font-medium text-gray-500">产品名称</th>
+              <th className="px-6 py-4 font-medium text-gray-500 w-24 text-center">排序</th>
               <th className="px-6 py-4 font-medium text-gray-500">类别</th>
               <th className="px-6 py-4 font-medium text-gray-500">描述</th>
               <th className="px-6 py-4 font-medium text-gray-500 text-right">操作</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {products.map((product) => (
+            {products.map((product, index) => (
               <tr key={product.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 font-medium text-gray-900">{product.name}</td>
+                <td className="px-6 py-4 font-medium text-gray-900">
+                  <div className="flex flex-col gap-1">
+                    <span className="font-semibold">{product.name}</span>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-1">
+                     <button 
+                        onClick={() => handleMove(index, 'up')}
+                        disabled={index === 0}
+                        className={`p-1 rounded hover:bg-gray-100 ${index === 0 ? 'text-gray-300' : 'text-gray-600'}`}
+                        title="上移"
+                     >
+                        <ArrowUp size={16} />
+                     </button>
+                     <button 
+                        onClick={() => handleMove(index, 'down')}
+                        disabled={index === products.length - 1}
+                        className={`p-1 rounded hover:bg-gray-100 ${index === products.length - 1 ? 'text-gray-300' : 'text-gray-600'}`}
+                        title="下移"
+                     >
+                        <ArrowDown size={16} />
+                     </button>
+                  </div>
+                </td>
                 <td className="px-6 py-4 text-gray-600">
                     <span className={`px-2 py-1 rounded-md text-xs font-medium ${getCategoryColor(product.category || '')}`}>{product.category}</span>
                 </td>

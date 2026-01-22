@@ -166,6 +166,14 @@ export const api = {
       });
       return await handleJsonResponse(response, 'Failed to delete product');
     },
+    reorderProducts: async (items: { id: string; sort_order: number }[]) => {
+      const response = await fetch(`${API_BASE_URL}/products/reorder`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(items),
+      });
+      return await handleJsonResponse(response, 'Failed to reorder products');
+    },
     createNews: async (data: NewsItem) => {
       const response = await fetch(`${API_BASE_URL}/news/`, {
         method: 'POST',
