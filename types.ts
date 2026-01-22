@@ -47,3 +47,18 @@ export interface AdminUserCreate {
     password: string;
     role: AdminRole;
 }
+
+export interface Exhibition {
+  id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  city: string;
+  tags: string[];
+  image: string;
+  featured?: boolean;
+  coreValue?: string;
+  highlights?: string[];
+}

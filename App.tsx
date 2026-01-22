@@ -9,6 +9,8 @@ import SystemsView from './views/Systems';
 import AboutView from './views/About';
 import PartnerView from './views/Partner';
 import NewsView from './views/News';
+import ExhibitionsView from './views/Exhibitions';
+import ExhibitionDetailView from './views/ExhibitionDetail';
 
 // Admin Views
 import Login from './views/admin/Login';
@@ -20,15 +22,21 @@ import NewsManager from './views/admin/NewsManager';
 import ApplicationManager from './views/admin/ApplicationManager';
 import UserManager from './views/admin/UserManager';
 
-export type ViewType = 'home' | 'solutions' | 'systems' | 'about' | 'partner' | 'news';
+export type ViewType = 'home' | 'solutions' | 'systems' | 'about' | 'partner' | 'news' | 'exhibitions' | 'exhibition_detail';
 
 const PublicApp = () => {
   const [currentView, setCurrentView] = useState<ViewType>('home');
+  const [selectedExhibitionId, setSelectedExhibitionId] = useState<string | null>(null);
 
   // Smooth scroll to top when changing views
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentView]);
+
+  const handleExhibitionSelect = (id: string) => {
+    setSelectedExhibitionId(id);
+    setCurrentView('exhibition_detail');
+  };
 
   const renderView = () => {
     switch (currentView) {
@@ -44,6 +52,10 @@ const PublicApp = () => {
         return <PartnerView />;
       case 'news':
         return <NewsView />;
+      case 'exhibitions':
+        return <ExhibitionsView onNavigate={setCurrentView} onSelectExhibition={handleExhibitionSelect} />;
+      case 'exhibition_detail':
+        return <ExhibitionDetailView id={selectedExhibitionId!} onNavigate={setCurrentView} />;
       default:
         return <HomeView onNavigate={setCurrentView} />;
     }

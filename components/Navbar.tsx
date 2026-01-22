@@ -22,6 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
 
   const navLinks: { name: string; view: ViewType; primary?: boolean }[] = [
     { name: '首页', view: 'home' },
+    { name: '国内展会', view: 'exhibitions' },
     { name: '低空解决方案', view: 'solutions' },
     { name: '管理系统', view: 'systems' },
     { name: '新闻中心', view: 'news' },

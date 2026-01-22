@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Shield, Plane, TrendingUp, Globe, Users, Briefcase, Zap, MapPin } from 'lucide-react';
-import { Solution, Product, PartnerBenefit, NewsItem } from './types';
+import { Solution, Product, PartnerBenefit, NewsItem, Exhibition } from './types';
 
 export const PRODUCT_CATEGORY_OPTIONS = [
   '云端管理平台',
@@ -59,6 +59,64 @@ export const SOLUTIONS: Solution[] = [
     description: '解决复杂地形的“最后一公里”配送难题，提升偏远地区物资转运效率。',
     image: 'https://images.unsplash.com/photo-1510519133415-cdaaa3e2419b?auto=format&fit=crop&q=80&w=1200',
     icon: 'Plane'
+  }
+];
+
+export const EXHIBITIONS: Exhibition[] = [
+  {
+    id: 'e1',
+    title: '深圳世界低空经济博览会',
+    description: '全球低空经济核心展示平台，聚焦无人机制造与低空基础设施。',
+    startDate: '2025-05-20',
+    endDate: '2025-05-22',
+    location: '深圳国际会展中心 (宝安新馆)',
+    city: '深圳',
+    tags: ['REGULATORY', 'FEATURED'],
+    image: 'https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&q=80&w=1200',
+    featured: true,
+    coreValue: '展示全球低空经济产业链的最新成果，推动行业技术交流与商业合作。',
+    highlights: [
+      '航空碳减排与可持续飞行技术',
+      '全电动垂直起降飞行器 (eVTOL) 实机演示',
+      '城市智慧物流与末端配送无人机群',
+      '全球低空经济投融资趋势论坛'
+    ]
+  },
+  {
+    id: 'e2',
+    title: '成都国际低空装备博览会',
+    description: '展示中国西部地区最新的低空防御系统与通用航空装备。',
+    startDate: '2025-06-18',
+    endDate: '2025-06-20',
+    location: '中国西部国际博览城',
+    city: '成都',
+    tags: ['DRONE'],
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
+    coreValue: '作为中国西部地区最大的低空装备展示平台，致力于连接技术供给与市场需求。',
+    highlights: [
+      '5G/6G 低空专用通信网络解决方案',
+      '低空空域数字化管理系统 (UTM)',
+      '反无人机系统与低空安全防御技术',
+      '应急救援与防灾减灾无人机应用'
+    ]
+  },
+  {
+    id: 'e3',
+    title: '珠海航展 - 低空经济展区',
+    description: '中国规模最大的航空盛事，专门开辟低空经济独立展馆。',
+    startDate: '2024-11-12',
+    endDate: '2024-11-17',
+    location: '珠海国际航展中心',
+    city: '珠海',
+    tags: ['EVTOL'],
+    image: 'https://images.unsplash.com/photo-1559067515-bf7d799b6d4d?auto=format&fit=crop&q=80&w=1200',
+    coreValue: '依托中国航展的全球影响力，打造世界级低空经济展示窗口。',
+    highlights: [
+      '大型货运无人机首飞演示',
+      '载人级自动驾驶飞行器体验',
+      '低空经济产业园招商推介会',
+      '航空航天科普教育互动区'
+    ]
   }
 ];
 
