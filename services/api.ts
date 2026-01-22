@@ -1,4 +1,4 @@
-import { Solution, Product, PartnerBenefit, NewsItem, AdminUserCreate, AdminUser, ExhibitionApplication } from '../types';
+import { Solution, Product, PartnerBenefit, NewsItem, AdminUserCreate, AdminUser, ExhibitionApplication, Exhibition } from '../types';
 
 const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:8000/api';
 
@@ -64,6 +64,24 @@ export const api = {
     } catch (error) {
       console.error('Error fetching news:', error);
       return [];
+    }
+  },
+  getExhibitions: async (): Promise<Exhibition[]> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/exhibitions/`);
+      return await handleJsonResponse(response, 'Failed to fetch exhibitions');
+    } catch (error) {
+      console.error('Error fetching exhibitions:', error);
+      return [];
+    }
+  },
+  getExhibition: async (id: string): Promise<Exhibition | null> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/exhibitions/${id}`);
+      return await handleJsonResponse(response, 'Failed to fetch exhibition');
+    } catch (error) {
+      console.error(`Error fetching exhibition ${id}:`, error);
+      return null;
     }
   },
   submitApplication: async (data: { name: string; phone: string; company: string; target_city: string; message: string }) => {
@@ -210,6 +228,28 @@ export const api = {
         method: 'DELETE',
       });
       return await handleJsonResponse(response, 'Failed to delete news');
+    },
+    createExhibition: async (data: Exhibition) => {
+      const response = await fetch(`${API_BASE_URL}/exhibitions/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to create exhibition');
+    },
+    updateExhibition: async (id: string, data: Exhibition) => {
+      const response = await fetch(`${API_BASE_URL}/exhibitions/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to update exhibition');
+    },
+    deleteExhibition: async (id: string) => {
+      const response = await fetch(`${API_BASE_URL}/exhibitions/${id}`, {
+        method: 'DELETE',
+      });
+      return await handleJsonResponse(response, 'Failed to delete exhibition');
     },
     getApplications: async () => {
       const token = localStorage.getItem('access_token');

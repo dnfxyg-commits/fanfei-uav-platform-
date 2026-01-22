@@ -19,6 +19,7 @@ import Dashboard from './views/admin/Dashboard';
 import SolutionManager from './views/admin/SolutionManager';
 import ProductManager from './views/admin/ProductManager';
 import NewsManager from './views/admin/NewsManager';
+import ExhibitionManager from './views/admin/ExhibitionManager';
 import ApplicationManager from './views/admin/ApplicationManager';
 import UserManager from './views/admin/UserManager';
 
@@ -84,6 +85,7 @@ function App() {
           <Route path="solutions" element={<SolutionManager />} />
           <Route path="products" element={<ProductManager />} />
           <Route path="news" element={<NewsManager />} />
+          <Route path="exhibitions" element={<ExhibitionManager />} />
           <Route path="applications" element={<ApplicationManager />} />
           <Route path="users" element={<UserManager />} />
         </Route>

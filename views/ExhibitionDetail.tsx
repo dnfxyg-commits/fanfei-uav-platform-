@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowLeft, Calendar, MapPin, Globe, CheckCircle, Ticket, Store, Zap, X, Loader2 } from 'lucide-react';
-import { EXHIBITIONS } from '../constants';
 import { ViewType } from '../App';
 import { api } from '../services/api';
-import { ExhibitionApplication } from '../types';
+import { Exhibition, ExhibitionApplication } from '../types';
 
 interface ExhibitionDetailViewProps {
   id: string;
@@ -182,11 +181,36 @@ const ApplicationModal: React.FC<ApplicationModalProps> = ({ isOpen, onClose, ty
 };
 
 const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavigate }) => {
-  const exhibition = EXHIBITIONS.find(e => e.id === id);
+  const [exhibition, setExhibition] = useState<Exhibition | null>(null);
+  const [loading, setLoading] = useState(true);
   const [modalState, setModalState] = useState<{ isOpen: boolean; type: 'ticket' | 'booth' }>({
     isOpen: false,
     type: 'ticket'
   });
+
+  useEffect(() => {
+    const fetchExhibition = async () => {
+      if (!id) return;
+      try {
+        const data = await api.getExhibition(id);
+        setExhibition(data);
+      } catch (error) {
+        console.error('Failed to load exhibition:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExhibition();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Loader2 className="animate-spin text-blue-600" size={32} />
+      </div>
+    );
+  }
 
   if (!exhibition) {
     return (
@@ -247,7 +271,7 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
                 </div>
                 <div>
                   <div className="text-xs text-slate-400 uppercase tracking-wider">举办日期</div>
-                  <div className="font-bold">{exhibition.startDate} - {exhibition.endDate?.split('-')[2]}</div>
+                  <div className="font-bold">{exhibition.start_date} - {exhibition.end_date?.split('-')[2]}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -288,9 +312,9 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
               <p className="text-lg text-slate-600 leading-relaxed mb-6">
                 {exhibition.description}
               </p>
-              {exhibition.coreValue && (
+              {exhibition.core_value && (
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  {exhibition.coreValue}
+                  {exhibition.core_value}
                 </p>
               )}
             </div>
@@ -299,12 +323,28 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
             <div className="bg-blue-50/50 rounded-3xl p-8 md:p-12 border border-blue-100">
               <h3 className="text-xl font-bold text-slate-900 mb-8">重点展示内容</h3>
               <div className="grid md:grid-cols-2 gap-6">
-                {exhibition.highlights?.map((highlight, idx) => (
-                  <div key={idx} className="flex items-start gap-4">
-                    <div className="mt-1 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                      <CheckCircle size={14} className="text-blue-600" />
+                {exhibition.highlights && exhibition.highlights.map((highlight, index) => (
+                  <div key={index} className="flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="font-bold">{index + 1}</span>
                     </div>
-                    <span className="text-slate-700 font-medium">{highlight}</span>
+                    <p className="text-slate-700 font-medium pt-2">{highlight}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Gallery (Mockup) */}
+            <div className="bg-white rounded-3xl p-8 shadow-sm">
+              <h3 className="text-xl font-bold text-slate-900 mb-6">往届精彩瞬间</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="aspect-square rounded-xl bg-slate-100 overflow-hidden">
+                    <img 
+                      src={`https://source.unsplash.com/random/400x400?drone,conference&sig=${i}`} 
+                      alt="Gallery" 
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                    />
                   </div>
                 ))}
               </div>
@@ -313,49 +353,59 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
 
           {/* Right Sidebar */}
           <div className="lg:w-1/3">
-            <div className="sticky top-24 bg-slate-900 text-white rounded-3xl p-8 shadow-2xl shadow-slate-900/20">
-              <div className="space-y-6 mb-8 border-b border-slate-700 pb-8">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">入场申请</span>
-                  <span className="text-green-400 flex items-center gap-2 text-sm font-bold">
-                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                    正在开放
-                  </span>
+            <div className="sticky top-24 space-y-6">
+              <div className="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div className="space-y-6 mb-8 border-b border-slate-700 pb-8">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">入场申请</span>
+                    <span className="text-green-400 flex items-center gap-2 text-sm font-bold">
+                      <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                      正在开放
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">预计展商</span>
+                    <span className="font-bold text-lg">2,500+ 全球名企</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-400">专业观众</span>
+                    <span className="font-bold text-lg">50,000+ 预计</span>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">预计展商</span>
-                  <span className="font-bold text-lg">2,500+ 全球名企</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400">专业观众</span>
-                  <span className="font-bold text-lg">50,000+ 预计</span>
+
+                <div className="space-y-4">
+                  <button 
+                    onClick={() => setModalState({ isOpen: true, type: 'ticket' })}
+                    className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/20 group"
+                  >
+                    <Ticket size={20} className="group-hover:-rotate-12 transition-transform" />
+                    免费预订门票
+                  </button>
+                  <button 
+                    onClick={() => setModalState({ isOpen: true, type: 'booth' })}
+                    className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all"
+                  >
+                    <Store size={20} />
+                    申请展位
+                  </button>
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <button 
-                  onClick={() => setModalState({ isOpen: true, type: 'ticket' })}
-                  className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-colors shadow-lg shadow-blue-600/30"
-                >
-                  <Ticket size={20} />
-                  门票预订
-                </button>
-                <button 
-                  onClick={() => setModalState({ isOpen: true, type: 'booth' })}
-                  className="w-full py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-colors border border-slate-700"
-                >
-                  <Store size={20} />
-                  展位申请
-                </button>
+              <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
+                <div className="relative z-10">
+                  <h3 className="font-bold text-lg mb-2">需要帮助？</h3>
+                  <p className="text-slate-400 text-sm mb-6">如有任何参展疑问，请随时联系我们的组委会团队。</p>
+                  <a href="mailto:contact@fanfei.com" className="text-blue-400 font-bold hover:text-blue-300">contact@fanfei.com</a>
+                </div>
+                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600/20 rounded-full blur-3xl"></div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
       <ApplicationModal 
-        isOpen={modalState.isOpen}
+        isOpen={modalState.isOpen} 
         onClose={() => setModalState({ ...modalState, isOpen: false })}
         type={modalState.type}
         exhibitionTitle={exhibition.title}

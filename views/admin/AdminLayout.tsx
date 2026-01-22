@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, Briefcase, FileText, LogOut, ClipboardList, Shield, Users } from 'lucide-react';
+import { LayoutDashboard, Package, Briefcase, FileText, LogOut, ClipboardList, Shield, Users, Calendar } from 'lucide-react';
 import { AdminRole } from '@/types';
 
 const AdminLayout: React.FC = () => {
@@ -41,6 +41,7 @@ const AdminLayout: React.FC = () => {
   // Define menu items
   const allNavItems = [
     { path: '/admin/dashboard', label: '仪表盘', icon: LayoutDashboard, roles: ['super_admin', 'content_operator', 'business_operator'] },
+    { path: '/admin/exhibitions', label: '展会管理', icon: Calendar, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/solutions', label: '解决方案', icon: Briefcase, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/products', label: '产品管理', icon: Package, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/news', label: '新闻动态', icon: FileText, roles: ['super_admin', 'content_operator'] },

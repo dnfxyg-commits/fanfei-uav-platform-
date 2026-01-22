@@ -38,6 +38,32 @@ FOR INSERT
 TO anon
 WITH CHECK (true);
 
--- Policy: Allow service role (backend) to do everything
--- (Implicitly allowed, but explicit policy for authenticated users/admin might be needed if accessing from frontend)
--- Since we are accessing this via backend API (service role), we don't strictly need more policies for anon.
+-- Create exhibitions table
+CREATE TABLE IF NOT EXISTS public.exhibitions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  start_date TEXT NOT NULL,
+  end_date TEXT NOT NULL,
+  location TEXT NOT NULL,
+  city TEXT NOT NULL,
+  tags TEXT[] DEFAULT '{}',
+  image TEXT NOT NULL,
+  featured BOOLEAN DEFAULT FALSE,
+  core_value TEXT,
+  highlights TEXT[] DEFAULT '{}',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Enable RLS
+ALTER TABLE public.exhibitions ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Allow public read access to exhibitions
+CREATE POLICY "Allow public read access" 
+ON public.exhibitions
+FOR SELECT 
+TO anon
+USING (true);
+
+-- Policy: Allow authenticated/service role to do everything
+-- (Implicitly allowed for service role)

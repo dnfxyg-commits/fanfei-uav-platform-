@@ -52,14 +52,14 @@ export interface Exhibition {
   id: string;
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  start_date: string;
+  end_date: string;
   location: string;
   city: string;
   tags: string[];
   image: string;
   featured?: boolean;
-  coreValue?: string;
+  core_value?: string;
   highlights?: string[];
 }
 

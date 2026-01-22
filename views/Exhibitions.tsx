@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Globe, ArrowRight, Filter } from 'lucide-react';
-import { EXHIBITIONS } from '../constants';
+import { api } from '../services/api';
+import { Exhibition } from '../types';
 import { ViewType } from '../App';
 
 interface ExhibitionsViewProps {
@@ -18,18 +19,25 @@ const CITIES = [
 ];
 
 const ExhibitionsView: React.FC<ExhibitionsViewProps> = ({ onNavigate, onSelectExhibition }) => {
+  const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<string>('全部');
   const [selectedCity, setSelectedCity] = useState<string>('全部');
 
-  const filteredExhibitions = EXHIBITIONS.filter(ex => {
-    // Basic filtering logic
-    // Note: The mock data dates are 2024/2025, but filter is 2026. 
-    // For demo purposes, we'll just filter by City if selected, and ignore Month strictly unless it matches.
-    // Or we can just show all if '全部' is selected.
-    
+  useEffect(() => {
+    const loadExhibitions = async () => {
+      try {
+        const data = await api.getExhibitions();
+        setExhibitions(data);
+      } catch (error) {
+        console.error('Failed to load exhibitions:', error);
+      }
+    };
+    loadExhibitions();
+  }, []);
+
+  const filteredExhibitions = exhibitions.filter(ex => {
     const cityMatch = selectedCity === '全部' || ex.city === selectedCity;
-    // Date matching would require parsing, skipping for simple demo unless critical
-    
+    // For now, date filtering is not implemented strictly as it requires parsing
     return cityMatch;
   });
 
@@ -150,7 +158,7 @@ const ExhibitionsView: React.FC<ExhibitionsViewProps> = ({ onNavigate, onSelectE
                   <div className="mt-auto space-y-3 pt-6 border-t border-slate-50">
                     <div className="flex items-center gap-3 text-slate-600 text-sm">
                       <Calendar size={16} className="text-blue-500" />
-                      <span>{item.startDate} - {item.endDate && item.endDate.split('-')[2]}</span>
+                      <span>{item.start_date} - {item.end_date && item.end_date.split('-')[2]}</span>
                     </div>
                     <div className="flex items-center gap-3 text-slate-600 text-sm">
                       <MapPin size={16} className="text-blue-500" />
@@ -177,6 +185,11 @@ const ExhibitionsView: React.FC<ExhibitionsViewProps> = ({ onNavigate, onSelectE
                 </div>
               </div>
             ))}
+            {filteredExhibitions.length === 0 && (
+               <div className="col-span-full py-12 text-center text-slate-500">
+                 暂无相关展会数据
+               </div>
+            )}
           </div>
         </div>
       </section>
