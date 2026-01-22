@@ -38,6 +38,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="text-xl font-bold mb-8">快速链接</h4>
             <ul className="space-y-4 text-slate-400">
               <li><button onClick={() => onNavigate('home')} className="hover:text-blue-500 transition-colors">首页</button></li>
+              <li><button onClick={() => onNavigate('exhibitions')} className="hover:text-blue-500 transition-colors">国内展会</button></li>
               <li><button onClick={() => onNavigate('solutions')} className="hover:text-blue-500 transition-colors">低空解决方案</button></li>
               <li><button onClick={() => onNavigate('systems')} className="hover:text-blue-500 transition-colors">管理系统</button></li>
               <li><button onClick={() => onNavigate('news')} className="hover:text-blue-500 transition-colors">新闻中心</button></li>
