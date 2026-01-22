@@ -8,30 +8,37 @@ router = APIRouter(prefix="/api/auth", tags=["Auth"])
 
 @router.post("/login", response_model=Token)
 def login(request: LoginRequest):
-    # Query database for user
-    response = supabase.table("admin_users").select("*").eq("username", request.username).execute()
-    
-    if not response.data or len(response.data) == 0:
-        raise HTTPException(status_code=400, detail="用户名或密码错误")
-    
-    user = response.data[0]
-    
-    if not verify_password(request.password, user["password_hash"]):
-        raise HTTPException(status_code=400, detail="用户名或密码错误")
-    
-    # Create Access Token
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user["username"], "role": user["role"]},
-        expires_delta=access_token_expires
-    )
-    
-    return {
-        "access_token": access_token, 
-        "token_type": "bearer",
-        "username": user["username"],
-        "role": user["role"]
-    }
+    try:
+        # Query database for user
+        response = supabase.table("admin_users").select("*").eq("username", request.username).execute()
+        
+        if not response.data or len(response.data) == 0:
+            raise HTTPException(status_code=400, detail="用户名或密码错误")
+        
+        user = response.data[0]
+        
+        if not verify_password(request.password, user["password_hash"]):
+            raise HTTPException(status_code=400, detail="用户名或密码错误")
+        
+        # Create Access Token
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user["username"], "role": user["role"]},
+            expires_delta=access_token_expires
+        )
+        
+        return {
+            "access_token": access_token, 
+            "token_type": "bearer",
+            "username": user["username"],
+            "role": user["role"]
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Login Error: {str(e)}")
+        # Return detailed error for debugging (remove in production later)
+        raise HTTPException(status_code=500, detail=f"Internal Error: {str(e)}")
 
 @router.post("/register", status_code=201)
 def register(user: AdminUserCreate):
