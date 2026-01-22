@@ -18,13 +18,27 @@ const Dashboard: React.FC = () => {
     const isBackendOnline = await api.checkHealth();
     setBackendStatus(isBackendOnline ? 'online' : 'offline');
 
-    // Check Database (via Supabase Auth session)
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      setDbStatus('online');
-      setUserEmail(session.user.email || '管理员');
+    // Check Database (via Supabase connection test)
+    // Since we use custom auth, we rely on backend for DB ops, but we can check if supabase client is configured
+    try {
+        const { error } = await supabase.from('partner_benefits').select('count', { count: 'exact', head: true });
+        setDbStatus(error ? 'offline' : 'online');
+    } catch (e) {
+        setDbStatus('offline');
+    }
+
+    // Set User from LocalStorage (Custom Auth)
+    const storedUsername = localStorage.getItem('admin_username');
+    if (storedUsername) {
+        setUserEmail(storedUsername);
     } else {
-      setDbStatus('offline');
+        // Fallback to Supabase session if available (legacy or mixed use)
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.email) {
+            setUserEmail(session.user.email);
+        } else {
+            setUserEmail('管理员');
+        }
     }
   };
 
