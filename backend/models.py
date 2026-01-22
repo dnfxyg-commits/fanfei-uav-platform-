@@ -40,6 +40,18 @@ class PartnerApplication(BaseModel):
     target_city: str
     message: str
 
+class ExhibitionApplication(BaseModel):
+    id: Optional[int] = None
+    exhibition_id: str
+    exhibition_title: str
+    type: str  # 'ticket' | 'booth'
+    name: str
+    company: str
+    phone: str
+    email: Optional[str] = None
+    message: Optional[str] = None
+    created_at: Optional[str] = None
+
 class LoginRequest(BaseModel):
     username: str
     password: str

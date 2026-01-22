@@ -13,28 +13,31 @@ CREATE TABLE public.admin_users (
 -- Enable RLS
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
 
--- Create policies
+-- Create exhibition_applications table for ticket bookings and booth applications
+CREATE TABLE IF NOT EXISTS public.exhibition_applications (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  exhibition_id TEXT NOT NULL,
+  exhibition_title TEXT NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('ticket', 'booth')),
+  name TEXT NOT NULL,
+  company TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT,
+  message TEXT,
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'contacted', 'approved', 'rejected')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
 
--- Allow users to read their own profile (e.g. for checking role)
--- Since we are not using Supabase Auth, current_user is not useful here in the same way.
--- But the backend handles the logic. RLS might be less relevant if we use a service role key in backend 
--- or if we don't use Supabase Client in frontend for this table anymore.
--- However, for safety, we can keep policies or just allow the service role (which has bypass RLS).
--- If we use the Supabase Client from frontend (anon key), we need policies.
--- But wait, our backend uses `supabase-py` which usually uses the SERVICE_ROLE_KEY if configured that way, 
--- OR it uses the anon key. 
--- In `database.py` (which I haven't seen but assume exists), if it uses `service_role`, RLS is bypassed.
--- If it uses `anon`, we need RLS.
--- Given the backend logic: `supabase.table("admin_users").select("*")...`
--- If this runs on the server, it should ideally use Service Role to manage all users.
+-- Enable RLS
+ALTER TABLE public.exhibition_applications ENABLE ROW LEVEL SECURITY;
 
--- For now, let's just enable RLS and create a policy that allows everything for the service role (implicit)
--- and maybe restrict public access.
--- Actually, if we are strictly using the Python Backend API for all admin_users operations,
--- we don't need to expose this table to the frontend Supabase client at all.
--- So we can just leave RLS enabled with NO policies for `anon` / `authenticated` roles, 
--- effectively making it private to the Service Role (Backend).
+-- Policy: Allow anyone (anon) to insert applications
+CREATE POLICY "Allow public submission" 
+ON public.exhibition_applications
+FOR INSERT 
+TO anon
+WITH CHECK (true);
 
--- So, just CREATE TABLE is enough if backend uses Service Role.
--- If backend uses Anon Key, we need to allow read/write.
--- Let's assume Backend uses Service Role Key for administrative tasks (which is best practice).
+-- Policy: Allow service role (backend) to do everything
+-- (Implicitly allowed, but explicit policy for authenticated users/admin might be needed if accessing from frontend)
+-- Since we are accessing this via backend API (service role), we don't strictly need more policies for anon.

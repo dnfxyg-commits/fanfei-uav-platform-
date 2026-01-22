@@ -1,4 +1,4 @@
-import { Solution, Product, PartnerBenefit, NewsItem, AdminUserCreate, AdminUser } from '../types';
+import { Solution, Product, PartnerBenefit, NewsItem, AdminUserCreate, AdminUser, ExhibitionApplication } from '../types';
 
 const API_BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:8000/api';
 
@@ -78,6 +78,21 @@ export const api = {
       return await handleJsonResponse(response, 'Failed to submit application');
     } catch (error) {
       console.error('Error submitting application:', error);
+      throw error;
+    }
+  },
+  submitExhibitionApplication: async (data: ExhibitionApplication) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/exhibitions/apply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to submit exhibition application');
+    } catch (error) {
+      console.error('Error submitting exhibition application:', error);
       throw error;
     }
   },
@@ -197,8 +212,24 @@ export const api = {
       return await handleJsonResponse(response, 'Failed to delete news');
     },
     getApplications: async () => {
-      const response = await fetch(`${API_BASE_URL}/partners/applications`);
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${API_BASE_URL}/partners/applications`, {
+        method: 'GET',
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
+      });
       return await handleJsonResponse(response, 'Failed to fetch applications');
+    },
+    getExhibitionApplications: async (): Promise<ExhibitionApplication[]> => {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${API_BASE_URL}/exhibitions/applications`, {
+        method: 'GET',
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return await handleJsonResponse(response, 'Failed to fetch exhibition applications');
     },
   },
   checkHealth: async () => {

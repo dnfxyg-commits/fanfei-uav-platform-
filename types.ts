@@ -62,3 +62,16 @@ export interface Exhibition {
   coreValue?: string;
   highlights?: string[];
 }
+
+export interface ExhibitionApplication {
+  id?: number;
+  exhibition_id: string;
+  exhibition_title: string;
+  type: 'ticket' | 'booth';
+  name: string;
+  company: string;
+  phone: string;
+  email?: string;
+  message?: string;
+  created_at?: string;
+}

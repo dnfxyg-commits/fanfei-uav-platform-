@@ -1,15 +1,192 @@
-import React from 'react';
-import { ArrowLeft, Calendar, MapPin, Globe, CheckCircle, Ticket, Store, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { ArrowLeft, Calendar, MapPin, Globe, CheckCircle, Ticket, Store, Zap, X, Loader2 } from 'lucide-react';
 import { EXHIBITIONS } from '../constants';
 import { ViewType } from '../App';
+import { api } from '../services/api';
+import { ExhibitionApplication } from '../types';
 
 interface ExhibitionDetailViewProps {
   id: string;
   onNavigate: (view: ViewType) => void;
 }
 
+interface ApplicationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  type: 'ticket' | 'booth';
+  exhibitionTitle: string;
+  exhibitionId: string;
+}
+
+const ApplicationModal: React.FC<ApplicationModalProps> = ({ isOpen, onClose, type, exhibitionTitle, exhibitionId }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    company: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const applicationData: ExhibitionApplication = {
+        exhibition_id: exhibitionId,
+        exhibition_title: exhibitionTitle,
+        type: type,
+        name: formData.name,
+        company: formData.company,
+        phone: formData.phone,
+        email: formData.email,
+        message: formData.message
+      };
+
+      await api.submitExhibitionApplication(applicationData);
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        setFormData({ name: '', phone: '', company: '', email: '', message: '' });
+        onClose();
+      }, 2000);
+    } catch (err) {
+      console.error('Submission error:', err);
+      setError('提交失败，请稍后重试');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl scale-100 animate-scale-in">
+        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+          <div>
+            <h3 className="text-xl font-bold text-slate-900">
+              {type === 'ticket' ? '门票预订' : '展位申请'}
+            </h3>
+            <p className="text-sm text-slate-500 mt-1">
+              {exhibitionTitle}
+            </p>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors p-1 hover:bg-slate-100 rounded-full">
+            <X size={20} />
+          </button>
+        </div>
+        
+        <div className="p-6">
+          {success ? (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle size={32} />
+              </div>
+              <h4 className="text-xl font-bold text-slate-900 mb-2">提交成功</h4>
+              <p className="text-slate-500">我们会尽快与您联系</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">姓名 <span className="text-red-500">*</span></label>
+                <input
+                  required
+                  type="text"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                  placeholder="您的姓名"
+                  value={formData.name}
+                  onChange={e => setFormData({...formData, name: e.target.value})}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">公司名称 <span className="text-red-500">*</span></label>
+                <input
+                  required
+                  type="text"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                  placeholder="公司全称"
+                  value={formData.company}
+                  onChange={e => setFormData({...formData, company: e.target.value})}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">联系电话 <span className="text-red-500">*</span></label>
+                  <input
+                    required
+                    type="tel"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                    placeholder="手机号码"
+                    value={formData.phone}
+                    onChange={e => setFormData({...formData, phone: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">电子邮箱</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                    placeholder="选填"
+                    value={formData.email}
+                    onChange={e => setFormData({...formData, email: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">留言备注</label>
+                <textarea
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all h-24 resize-none"
+                  placeholder="如有特殊需求请留言..."
+                  value={formData.message}
+                  onChange={e => setFormData({...formData, message: e.target.value})}
+                ></textarea>
+              </div>
+
+              {error && (
+                <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    提交中...
+                  </>
+                ) : (
+                  '确认提交'
+                )}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+};
+
 const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavigate }) => {
   const exhibition = EXHIBITIONS.find(e => e.id === id);
+  const [modalState, setModalState] = useState<{ isOpen: boolean; type: 'ticket' | 'booth' }>({
+    isOpen: false,
+    type: 'ticket'
+  });
 
   if (!exhibition) {
     return (
@@ -156,11 +333,17 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
               </div>
 
               <div className="space-y-4">
-                <button className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-colors shadow-lg shadow-blue-600/30">
+                <button 
+                  onClick={() => setModalState({ isOpen: true, type: 'ticket' })}
+                  className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-colors shadow-lg shadow-blue-600/30"
+                >
                   <Ticket size={20} />
                   门票预订
                 </button>
-                <button className="w-full py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-colors border border-slate-700">
+                <button 
+                  onClick={() => setModalState({ isOpen: true, type: 'booth' })}
+                  className="w-full py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-colors border border-slate-700"
+                >
                   <Store size={20} />
                   展位申请
                 </button>
@@ -170,13 +353,16 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
 
         </div>
       </div>
+
+      <ApplicationModal 
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        type={modalState.type}
+        exhibitionTitle={exhibition.title}
+        exhibitionId={exhibition.id}
+      />
     </div>
   );
 };
-
-// Need to import Zap but it's not imported above, let's fix imports
-// Wait, I imported Calendar, MapPin, Globe, CheckCircle, Ticket, Store, ArrowLeft
-// I missed Zap.
-// Re-importing all needed icons.
 
 export default ExhibitionDetailView;
