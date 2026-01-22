@@ -15,7 +15,7 @@ interface Application {
 }
 
 const ApplicationManager: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'partner' | 'exhibition'>('partner');
+  const [activeTab, setActiveTab] = useState<'partner' | 'ticket' | 'booth'>('partner');
   const [applications, setApplications] = useState<Application[]>([]);
   const [exhibitionApps, setExhibitionApps] = useState<ExhibitionApplication[]>([]);
   const [loading, setLoading] = useState(false);
@@ -31,6 +31,7 @@ const ApplicationManager: React.FC = () => {
         const data = await api.admin.getApplications();
         setApplications(data);
       } else {
+        // Load all exhibition applications, filtering is done in render
         const data = await api.admin.getExhibitionApplications();
         setExhibitionApps(data);
       }
@@ -68,15 +69,26 @@ const ApplicationManager: React.FC = () => {
           合伙人申请
         </button>
         <button
-          onClick={() => setActiveTab('exhibition')}
+          onClick={() => setActiveTab('ticket')}
           className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${
-            activeTab === 'exhibition'
+            activeTab === 'ticket'
               ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
               : 'bg-white text-gray-500 hover:bg-gray-50'
           }`}
         >
           <Ticket size={20} />
-          展会/门票申请
+          门票预订
+        </button>
+        <button
+          onClick={() => setActiveTab('booth')}
+          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${
+            activeTab === 'booth'
+              ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+              : 'bg-white text-gray-500 hover:bg-gray-50'
+          }`}
+        >
+          <Store size={20} />
+          展位申请
         </button>
       </div>
 
@@ -135,17 +147,19 @@ const ApplicationManager: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {exhibitionApps.length === 0 ? (
+              {exhibitionApps.filter(app => app.type === activeTab).length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-gray-400">
                     <div className="flex flex-col items-center gap-3">
                       <FileText size={48} className="opacity-20" />
-                      <p>暂无展会申请记录</p>
+                      <p>暂无{activeTab === 'ticket' ? '门票预订' : '展位申请'}记录</p>
                     </div>
                   </td>
                 </tr>
               ) : (
-                exhibitionApps.map((app, idx) => (
+                exhibitionApps
+                  .filter(app => app.type === activeTab)
+                  .map((app, idx) => (
                   <tr key={app.id || idx} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-gray-600 text-sm">
                       {app.created_at ? new Date(app.created_at).toLocaleString() : '-'}
