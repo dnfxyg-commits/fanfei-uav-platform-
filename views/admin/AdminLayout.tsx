@@ -42,6 +42,7 @@ const AdminLayout: React.FC = () => {
   const allNavItems = [
     { path: '/admin/dashboard', label: '仪表盘', icon: LayoutDashboard, roles: ['super_admin', 'content_operator', 'business_operator'] },
     { path: '/admin/exhibitions', label: '展会管理', icon: Calendar, roles: ['super_admin', 'content_operator'] },
+    { path: '/admin/associations', label: '团体组织', icon: Building2, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/solutions', label: '解决方案', icon: Briefcase, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/products', label: '产品管理', icon: Package, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/news', label: '产业商机', icon: FileText, roles: ['super_admin', 'content_operator'] },
