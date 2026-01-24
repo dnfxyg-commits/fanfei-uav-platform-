@@ -396,15 +396,6 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
                   </button>
                 </div>
               </div>
-
-              <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
-                <div className="relative z-10">
-                  <h3 className="font-bold text-lg mb-2">需要帮助？</h3>
-                  <p className="text-slate-400 text-sm mb-6">如有任何参展疑问，请随时联系我们的组委会团队。</p>
-                  <a href="mailto:contact@fanfei.com" className="text-blue-400 font-bold hover:text-blue-300">contact@fanfei.com</a>
-                </div>
-                <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600/20 rounded-full blur-3xl"></div>
-              </div>
             </div>
           </div>
         </div>
