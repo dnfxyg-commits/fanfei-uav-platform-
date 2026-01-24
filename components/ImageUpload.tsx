@@ -7,9 +7,10 @@ interface ImageUploadProps {
   onChange: (url: string) => void;
   disabled?: boolean;
   className?: string;
+  height?: string;
 }
 
-export default function ImageUpload({ value, onChange, disabled, className = '' }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, disabled, className = '', height = 'h-48' }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,7 +64,7 @@ export default function ImageUpload({ value, onChange, disabled, className = '' 
           <img 
             src={value} 
             alt="Uploaded" 
-            className="w-full h-48 object-cover"
+            className={`w-full ${height} object-cover`}
           />
           <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <button
@@ -80,7 +81,7 @@ export default function ImageUpload({ value, onChange, disabled, className = '' 
       ) : (
         <div className="relative">
           <label className={`
-            flex flex-col items-center justify-center w-full h-48 
+            flex flex-col items-center justify-center w-full ${height}
             border-2 border-dashed border-gray-300 rounded-lg 
             cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors
             ${uploading || disabled ? 'opacity-50 cursor-not-allowed' : ''}

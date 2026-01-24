@@ -319,6 +319,7 @@ const ExhibitionManager: React.FC = () => {
                 <ImageUpload
                   value={formData.image}
                   onChange={(url) => setFormData({ ...formData, image: url })}
+                  height="h-auto aspect-video"
                 />
                 <input 
                   type="text" 
