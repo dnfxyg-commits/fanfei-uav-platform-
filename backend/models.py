@@ -65,6 +65,7 @@ class Exhibition(BaseModel):
     featured: Optional[bool] = False
     core_value: Optional[str] = None
     highlights: List[str] = []
+    gallery_images: List[str] = []
     created_at: Optional[str] = None
 
 class LoginRequest(BaseModel):

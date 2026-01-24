@@ -61,6 +61,7 @@ export interface Exhibition {
   featured?: boolean;
   core_value?: string;
   highlights?: string[];
+  gallery_images?: string[];
   created_at?: string;
 }
 

@@ -12,6 +12,7 @@ create table if not exists public.exhibitions (
   featured boolean default false,
   core_value text,
   highlights text[] default '{}',
+  gallery_images text[] default '{}', -- Added gallery_images
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
@@ -65,3 +66,6 @@ create policy "Admins can view applications"
   on public.exhibition_applications for select
   to authenticated
   using (true);
+
+-- Update for existing tables (if needed)
+alter table public.exhibitions add column if not exists gallery_images text[] default '{}';

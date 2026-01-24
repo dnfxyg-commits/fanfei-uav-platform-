@@ -21,6 +21,7 @@ const ExhibitionManager: React.FC = () => {
     featured: false,
     core_value: '',
     highlights: [],
+    gallery_images: [],
   });
 
   // Helper state for array inputs
@@ -91,6 +92,7 @@ const ExhibitionManager: React.FC = () => {
       featured: item.featured || false,
       core_value: item.core_value || '',
       highlights: item.highlights || [],
+      gallery_images: item.gallery_images || [],
     });
     setTagsInput((item.tags || []).join(', '));
     setHighlightsInput((item.highlights || []).join(', '));
@@ -111,6 +113,7 @@ const ExhibitionManager: React.FC = () => {
       featured: false,
       core_value: '',
       highlights: [],
+      gallery_images: [],
     });
     setTagsInput('');
     setHighlightsInput('');
@@ -325,6 +328,37 @@ const ExhibitionManager: React.FC = () => {
                   onInvalid={(e) => (e.target as HTMLInputElement).setCustomValidity('请上传图片')}
                   onInput={(e) => (e.target as HTMLInputElement).setCustomValidity('')}
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">精彩瞬间 (多图)</label>
+                <div className="grid grid-cols-4 gap-4 mb-4">
+                  {formData.gallery_images?.map((img, idx) => (
+                    <div key={idx} className="relative aspect-square rounded-lg overflow-hidden group bg-gray-100 border border-gray-200">
+                      <img src={img} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newImages = [...(formData.gallery_images || [])];
+                          newImages.splice(idx, 1);
+                          setFormData({ ...formData, gallery_images: newImages });
+                        }}
+                        className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <ImageUpload
+                  value=""
+                  onChange={(url) => {
+                    if (url) {
+                      setFormData({ ...formData, gallery_images: [...(formData.gallery_images || []), url] });
+                    }
+                  }}
+                />
+                <p className="text-xs text-gray-500 mt-1">上传后会自动添加到上方列表</p>
               </div>
               
               <div className="flex justify-end gap-3 mt-6">

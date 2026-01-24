@@ -334,20 +334,26 @@ const ExhibitionDetailView: React.FC<ExhibitionDetailViewProps> = ({ id, onNavig
               </div>
             </div>
 
-            {/* Gallery (Mockup) */}
+            {/* Gallery */}
             <div className="bg-white rounded-3xl p-8 shadow-sm">
               <h3 className="text-xl font-bold text-slate-900 mb-6">往届精彩瞬间</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="aspect-square rounded-xl bg-slate-100 overflow-hidden">
-                    <img 
-                      src={`https://source.unsplash.com/random/400x400?drone,conference&sig=${i}`} 
-                      alt="Gallery" 
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                ))}
-              </div>
+              {exhibition.gallery_images && exhibition.gallery_images.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {exhibition.gallery_images.map((img, i) => (
+                    <div key={i} className="aspect-square rounded-xl bg-slate-100 overflow-hidden">
+                      <img 
+                        src={img} 
+                        alt="Gallery" 
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-slate-500 bg-slate-50 rounded-xl">
+                  暂无图片
+                </div>
+              )}
             </div>
           </div>
 
