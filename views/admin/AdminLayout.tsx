@@ -67,6 +67,9 @@ const AdminLayout: React.FC = () => {
             <Shield className="text-blue-500" />
             后台管理系统
           </h1>
+          <div className="mt-1 ml-8 text-xs text-slate-400 font-medium tracking-wider">
+            低空经济数字港
+          </div>
           {role && (
             <div className="mt-2 text-xs text-slate-400 uppercase tracking-wider bg-slate-800 py-1 px-2 rounded w-fit">
               {role === 'super_admin' && '超级管理员'}

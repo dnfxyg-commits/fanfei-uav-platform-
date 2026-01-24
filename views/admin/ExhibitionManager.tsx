@@ -60,7 +60,8 @@ const ExhibitionManager: React.FC = () => {
       loadExhibitions();
     } catch (error) {
       console.error('Operation failed:', error);
-      alert('操作失败，请重试');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`操作失败: ${errorMessage}`);
     }
   };
 
