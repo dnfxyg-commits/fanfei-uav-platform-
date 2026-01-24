@@ -70,9 +70,9 @@ const NewsView: React.FC = () => {
                 className="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-blue-600"
               >
                 <ArrowLeft size={16} />
-                返回新闻列表
+                返回商机列表
               </button>
-              <span className="text-xs text-slate-400">News Detail</span>
+              <span className="text-xs text-slate-400">Business Opportunities</span>
             </div>
           </section>
 
@@ -203,7 +203,7 @@ const NewsView: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-32 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">暂无相关新闻</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">暂无相关商机</h3>
                   <p className="text-slate-500">请尝试切换其他分类查看</p>
                 </div>
               )}

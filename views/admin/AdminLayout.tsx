@@ -44,7 +44,7 @@ const AdminLayout: React.FC = () => {
     { path: '/admin/exhibitions', label: '展会管理', icon: Calendar, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/solutions', label: '解决方案', icon: Briefcase, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/products', label: '产品管理', icon: Package, roles: ['super_admin', 'content_operator'] },
-    { path: '/admin/news', label: '新闻动态', icon: FileText, roles: ['super_admin', 'content_operator'] },
+    { path: '/admin/news', label: '产业商机', icon: FileText, roles: ['super_admin', 'content_operator'] },
     { path: '/admin/applications', label: '表单提交', icon: ClipboardList, roles: ['super_admin', 'business_operator'] },
     { path: '/admin/users', label: '用户管理', icon: Users, roles: ['super_admin'] },
   ];

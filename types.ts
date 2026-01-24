@@ -67,7 +67,7 @@ export interface Exhibition {
 export interface Association {
   id?: string;
   name: string;
-  type: string; // '协会' | '联盟'
+  type: string; // '协会' | '联盟' | '媒体'
   description: string;
   content?: string;
   join_info?: string;

@@ -208,6 +208,7 @@ const AssociationManager: React.FC = () => {
                     >
                       <option value="协会">协会</option>
                       <option value="联盟">联盟</option>
+                      <option value="媒体">媒体</option>
                     </select>
                   </div>
                   <div>

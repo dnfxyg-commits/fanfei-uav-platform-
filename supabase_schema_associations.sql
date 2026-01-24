@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS associations (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
-    type TEXT NOT NULL, -- '协会' or '联盟'
+    type TEXT NOT NULL, -- '协会' or '联盟' or '媒体'
     description TEXT,
     content TEXT,
     join_info TEXT,

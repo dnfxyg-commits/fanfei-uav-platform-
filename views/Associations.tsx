@@ -79,7 +79,9 @@ const AssociationsView: React.FC<AssociationsViewProps> = ({ onNavigate, onSelec
                   )}
                 </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  item.type === '协会' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'
+                  item.type === '协会' ? 'bg-blue-50 text-blue-600' : 
+                  item.type === '联盟' ? 'bg-purple-50 text-purple-600' :
+                  'bg-orange-50 text-orange-600'
                 }`}>
                   {item.type}
                 </span>
