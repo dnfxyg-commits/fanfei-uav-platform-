@@ -25,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
     { name: '国内展会', view: 'exhibitions' },
     { name: '团体组织', view: 'associations' },
     { name: '低空解决方案', view: 'solutions' },
-    { name: '管理系统', view: 'systems' },
+    { name: '产业装备库', view: 'systems' },
     { name: '新闻中心', view: 'news' },
     { name: '关于我们', view: 'about' },
     { name: '合伙人计划', view: 'partner', primary: true },

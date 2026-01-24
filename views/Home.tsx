@@ -123,7 +123,7 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     onClick={() => onNavigate('systems')}
                     className="w-fit px-6 py-2.5 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition-colors"
                   >
-                    进入系统目录
+                    进入装备库
                   </button>
                 </div>
               </>
@@ -146,7 +146,7 @@ const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
                     onClick={() => onNavigate('systems')}
                     className="w-fit px-6 py-2.5 bg-white text-slate-900 rounded-full font-bold text-sm hover:bg-blue-600 hover:text-white transition-colors"
                   >
-                    进入系统目录
+                    进入装备库
                   </button>
                 </div>
               </>

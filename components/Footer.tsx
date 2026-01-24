@@ -40,7 +40,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li><button onClick={() => onNavigate('home')} className="hover:text-blue-500 transition-colors">首页</button></li>
               <li><button onClick={() => onNavigate('exhibitions')} className="hover:text-blue-500 transition-colors">国内展会</button></li>
               <li><button onClick={() => onNavigate('solutions')} className="hover:text-blue-500 transition-colors">低空解决方案</button></li>
-              <li><button onClick={() => onNavigate('systems')} className="hover:text-blue-500 transition-colors">管理系统</button></li>
+              <li><button onClick={() => onNavigate('systems')} className="hover:text-blue-500 transition-colors">产业装备库</button></li>
               <li><button onClick={() => onNavigate('news')} className="hover:text-blue-500 transition-colors">新闻中心</button></li>
               <li><button onClick={() => onNavigate('partner')} className="hover:text-blue-500 transition-colors">合伙人计划</button></li>
               <li><button onClick={() => onNavigate('about')} className="hover:text-blue-500 transition-colors">关于我们</button></li>

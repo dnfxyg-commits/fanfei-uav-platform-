@@ -31,10 +31,10 @@ const SystemsView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end gap-8">
             <div className="max-w-2xl">
-              <span className="text-blue-600 font-bold tracking-widest text-xs uppercase mb-2 block">Management Systems</span>
-              <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">管理系统目录</h1>
+              <span className="text-blue-600 font-bold tracking-widest text-xs uppercase mb-2 block">Industrial Equipment Library</span>
+              <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">产业装备库</h1>
               <p className="text-lg text-slate-500">
-                定义低空数字化效率，全栈式无人机云管控与智能分析系统。
+                专为极端作业环境设计的工业级飞行平台与智能系统，定义低空效率新标准。
               </p>
             </div>
             <div className="flex gap-4">
@@ -42,7 +42,7 @@ const SystemsView: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                 <input 
                   type="text" 
-                  placeholder="搜索系统功能..." 
+                  placeholder="搜索装备..." 
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-10 pr-4 py-2.5 bg-white border rounded-full text-sm focus:ring-2 focus:ring-blue-100 outline-none w-64 shadow-sm"
