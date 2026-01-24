@@ -49,18 +49,32 @@ export interface AdminUserCreate {
 }
 
 export interface Exhibition {
-  id: string;
+  id?: string; // UUID
   title: string;
   description: string;
   start_date: string;
   end_date: string;
   location: string;
   city: string;
-  tags: string[];
+  tags?: string[];
   image: string;
   featured?: boolean;
   core_value?: string;
   highlights?: string[];
+  created_at?: string;
+}
+
+export interface Association {
+  id?: string;
+  name: string;
+  type: string; // '协会' | '联盟'
+  description: string;
+  content?: string;
+  join_info?: string;
+  logo: string;
+  contact_info?: string;
+  website?: string;
+  created_at?: string;
 }
 
 export interface ExhibitionApplication {

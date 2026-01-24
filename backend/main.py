@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import solutions, products, partners, news, auth, exhibitions
+from routers import solutions, products, partners, news, auth, exhibitions, associations
 
 app = FastAPI(
     title="Fanfei UAV Platform API",
@@ -34,6 +34,7 @@ app.include_router(partners.router)
 app.include_router(news.router)
 app.include_router(auth.router)
 app.include_router(exhibitions.router)
+app.include_router(associations.router)
 
 @app.get("/")
 def read_root():

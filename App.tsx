@@ -11,6 +11,8 @@ import PartnerView from './views/Partner';
 import NewsView from './views/News';
 import ExhibitionsView from './views/Exhibitions';
 import ExhibitionDetailView from './views/ExhibitionDetail';
+import AssociationsView from './views/Associations';
+import AssociationDetailView from './views/AssociationDetail';
 
 // Admin Views
 import Login from './views/admin/Login';
@@ -20,14 +22,16 @@ import SolutionManager from './views/admin/SolutionManager';
 import ProductManager from './views/admin/ProductManager';
 import NewsManager from './views/admin/NewsManager';
 import ExhibitionManager from './views/admin/ExhibitionManager';
+import AssociationManager from './views/admin/AssociationManager';
 import ApplicationManager from './views/admin/ApplicationManager';
 import UserManager from './views/admin/UserManager';
 
-export type ViewType = 'home' | 'solutions' | 'systems' | 'about' | 'partner' | 'news' | 'exhibitions' | 'exhibition_detail';
+export type ViewType = 'home' | 'solutions' | 'systems' | 'about' | 'partner' | 'news' | 'exhibitions' | 'exhibition_detail' | 'associations' | 'association_detail';
 
 const PublicApp = () => {
   const [currentView, setCurrentView] = useState<ViewType>('home');
   const [selectedExhibitionId, setSelectedExhibitionId] = useState<string | null>(null);
+  const [selectedAssociationId, setSelectedAssociationId] = useState<string | null>(null);
 
   // Smooth scroll to top when changing views
   useEffect(() => {
@@ -37,6 +41,11 @@ const PublicApp = () => {
   const handleExhibitionSelect = (id: string) => {
     setSelectedExhibitionId(id);
     setCurrentView('exhibition_detail');
+  };
+
+  const handleAssociationSelect = (id: string) => {
+    setSelectedAssociationId(id);
+    setCurrentView('association_detail');
   };
 
   const renderView = () => {
@@ -57,6 +66,10 @@ const PublicApp = () => {
         return <ExhibitionsView onNavigate={setCurrentView} onSelectExhibition={handleExhibitionSelect} />;
       case 'exhibition_detail':
         return <ExhibitionDetailView id={selectedExhibitionId!} onNavigate={setCurrentView} />;
+      case 'associations':
+        return <AssociationsView onNavigate={setCurrentView} onSelectAssociation={handleAssociationSelect} />;
+      case 'association_detail':
+        return <AssociationDetailView id={selectedAssociationId!} onNavigate={setCurrentView} />;
       default:
         return <HomeView onNavigate={setCurrentView} />;
     }
@@ -86,6 +99,7 @@ function App() {
           <Route path="products" element={<ProductManager />} />
           <Route path="news" element={<NewsManager />} />
           <Route path="exhibitions" element={<ExhibitionManager />} />
+          <Route path="associations" element={<AssociationManager />} />
           <Route path="applications" element={<ApplicationManager />} />
           <Route path="users" element={<UserManager />} />
         </Route>

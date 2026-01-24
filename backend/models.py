@@ -81,3 +81,15 @@ class Token(BaseModel):
     token_type: str
     username: str
     role: str
+
+class Association(BaseModel):
+    id: Optional[str] = None
+    name: str
+    type: str
+    description: str
+    content: Optional[str] = None
+    join_info: Optional[str] = None
+    logo: str
+    contact_info: Optional[str] = None
+    website: Optional[str] = None
+    created_at: Optional[str] = None

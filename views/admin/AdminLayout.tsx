@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, Briefcase, FileText, LogOut, ClipboardList, Shield, Users, Calendar } from 'lucide-react';
+import { LayoutDashboard, Package, Briefcase, FileText, LogOut, ClipboardList, Shield, Users, Calendar, Building2 } from 'lucide-react';
 import { AdminRole } from '@/types';
 
 const AdminLayout: React.FC = () => {

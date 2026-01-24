@@ -84,6 +84,24 @@ export const api = {
       return null;
     }
   },
+  getAssociations: async (): Promise<Association[]> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/associations/`);
+      return await handleJsonResponse(response, 'Failed to fetch associations');
+    } catch (error) {
+      console.error('Error fetching associations:', error);
+      return [];
+    }
+  },
+  getAssociation: async (id: string): Promise<Association | null> => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/associations/${id}`);
+      return await handleJsonResponse(response, 'Failed to fetch association');
+    } catch (error) {
+      console.error(`Error fetching association ${id}:`, error);
+      return null;
+    }
+  },
   submitApplication: async (data: { name: string; phone: string; company: string; target_city: string; message: string }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/partners/apply`, {
@@ -250,6 +268,28 @@ export const api = {
         method: 'DELETE',
       });
       return await handleJsonResponse(response, 'Failed to delete exhibition');
+    },
+    createAssociation: async (data: Association) => {
+      const response = await fetch(`${API_BASE_URL}/associations/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to create association');
+    },
+    updateAssociation: async (id: string, data: Association) => {
+      const response = await fetch(`${API_BASE_URL}/associations/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      return await handleJsonResponse(response, 'Failed to update association');
+    },
+    deleteAssociation: async (id: string) => {
+      const response = await fetch(`${API_BASE_URL}/associations/${id}`, {
+        method: 'DELETE',
+      });
+      return await handleJsonResponse(response, 'Failed to delete association');
     },
     getApplications: async () => {
       const token = localStorage.getItem('access_token');
