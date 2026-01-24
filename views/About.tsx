@@ -24,7 +24,10 @@ const AboutView: React.FC = () => {
             <div>
               <span className="text-blue-600 font-bold tracking-widest text-sm uppercase mb-4 block">关于我们</span>
               <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-8 leading-tight">
-                我们不仅仅制造无人机，<br />我们正在定义低空经济。
+                破壁低空，桥接未来
+                <span className="block text-xl md:text-3xl mt-6 text-slate-500 font-medium">
+                  ——赋能产业拓疆，交付场景价值，一站式开启低空新纪元
+                </span>
               </h2>
               <div className="space-y-6 text-slate-600 text-lg leading-relaxed">
                 <p>
