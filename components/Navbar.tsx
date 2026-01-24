@@ -45,6 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               <span className="text-white font-bold text-xl">閞</span>
             </div>
             <span className={`text-2xl font-bold tracking-tight transition-colors ${isTransparent ? 'text-white' : 'text-slate-900'}`}>閞飞翔</span>
+            <span className={`hidden sm:block ml-3 pl-3 border-l ${isTransparent ? 'border-white/30 text-blue-100' : 'border-slate-300 text-slate-500'} text-sm font-medium tracking-wide`}>低空经济数字港</span>
           </div>
 
           {/* Desktop Links */}
